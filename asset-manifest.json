@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/overwatchle/static/js/main.31d60c02.js",
+    "static/js/453.b8e90db7.chunk.js": "/overwatchle/static/js/453.b8e90db7.chunk.js",
+    "index.html": "/overwatchle/index.html",
+    "main.31d60c02.js.map": "/overwatchle/static/js/main.31d60c02.js.map",
+    "453.b8e90db7.chunk.js.map": "/overwatchle/static/js/453.b8e90db7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.31d60c02.js"
+  ]
+}
