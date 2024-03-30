@@ -11,11 +11,13 @@ export const HeroSelect = ({
   return (
     <Flex
       flexDirection={"row"}
-      gap={4}
+      gap={0}
       wrap={"wrap"}
       height={"auto"}
       justifyContent={"center"}
+      alignItems={"center"}
       flexGrow={1}
+      px={4}
     >
       <HeroPool
         selected={selected}

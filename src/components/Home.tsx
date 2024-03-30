@@ -7,7 +7,13 @@ import { Footer } from "./Footer";
 
 const Home = () => {
   return (
-    <Flex p={8} style={{ ...styles.flexContainer, ...styles.body }}>
+    <Flex
+      p={4}
+      width={"100%"}
+      height={"100vh"}
+      flexDirection={"column"}
+      alignItems={"center"}
+    >
       <Header />
       <App />
       <Footer />
@@ -15,16 +21,4 @@ const Home = () => {
   );
 };
 
-const styles: Styles = {
-  body: {
-    width: "100%",
-    height: "100vh",
-  },
-  flexContainer: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-};
 export default Home;

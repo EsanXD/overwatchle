@@ -1,3 +1,22 @@
+import { Styles } from "./interfaces";
+
+export const styles: Styles = {
+  font: {
+    fontFamily: "Orbitron",
+    fontOpticalSizing: "auto",
+    fontWeight: 800,
+    fontStyle: "bold",
+  },
+  primary: {
+    color: "#fff",
+    backgroundColor: "#f06414",
+  },
+  secondary: {
+    color: "#fff",
+    backgroundColor: "#05a0fa",
+  },
+};
+
 export const abilities = [
   {
     hero: "mauga",

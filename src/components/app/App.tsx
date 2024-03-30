@@ -17,7 +17,7 @@ import {
   Spacer,
   Button,
 } from "@chakra-ui/react";
-import { abilities } from "../util/consts";
+import { styles } from "../util/consts";
 import { HeroSelect } from "./HeroSelect";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -82,8 +82,7 @@ export const App = () => {
       mx="auto"
       align="center"
       justify="space-between"
-      gap={8}
-      p={8}
+      gap={2}
     >
       {modalActive && (
         <ScoreModal
@@ -96,7 +95,7 @@ export const App = () => {
         />
       )}
       <Spacer />
-      <Heading>Stage {turn + 1}</Heading>
+      <Heading style={styles.font}>STAGE {turn + 1}</Heading>
       <Stepper index={turn} colorScheme="blue">
         {data.map((step, index) => (
           <Step key={index}>
@@ -109,10 +108,13 @@ export const App = () => {
       </Stepper>
       <Spacer />
       {data.length > 0 && turn < 3 && (
-        <Image loading="lazy" height={"20vh"} src={data[turn].img} />
+        <Image loading="lazy" width={"20vw"} src={data[turn].img} />
       )}
       <Spacer />
+      <Spacer />
       <Input
+        style={styles.secondary}
+        maxWidth={"50vw"}
         value={ability}
         onChange={handleChange}
         placeholder="Guess the ability"
@@ -130,7 +132,13 @@ export const App = () => {
           setCharacterGuess={setCharacterGuess}
         />
       </Flex>
-      <Button onClick={handleSubmit}>Submit Guess</Button>
+      <Button
+        style={{ ...styles.primary, ...styles.font }}
+        onClick={handleSubmit}
+        my={4}
+      >
+        SUBMIT GUESS
+      </Button>
     </Flex>
   );
 };

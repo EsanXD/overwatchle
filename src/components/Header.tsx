@@ -1,18 +1,16 @@
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
+import { styles } from "./util/consts";
 
 export const Header = () => {
   return (
-    <Box py={4}>
-      <Flex
-        maxW="container.lg"
-        mx="auto"
-        align="center"
-        justify="space-between"
-      >
-        <Heading as="h1" size="lg">
-          Guess the Overwatch Ability!
-        </Heading>
-        {/* Add your navigation links or other content here */}
+    <Box>
+      <Flex maxW="container.lg" mx="auto" align="center" justify="center">
+        <Image
+          src={process.env.PUBLIC_URL + "/OverwatchleLogo.png"}
+          alt="Overwatchle logo"
+          width={"90vw"}
+          height={"8vh"}
+        />
       </Flex>
     </Box>
   );
