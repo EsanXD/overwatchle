@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Styles } from "./interfaces";
 import { Header } from "./Header";
 import { App } from "./App";

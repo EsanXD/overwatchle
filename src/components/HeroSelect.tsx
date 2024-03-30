@@ -1,4 +1,4 @@
-import { Flex, Image, Box, Divider, IconButton } from "@chakra-ui/react";
+import { Flex, Image, IconButton } from "@chakra-ui/react";
 import { tank, dps, support } from "./characters";
 
 export const HeroSelect = ({
@@ -60,7 +60,7 @@ const HeroPool = ({
 
   return (
     <Flex gap={3} alignItems={"center"} justifyContent={"center"} height={110}>
-      <Image height={50} src={typeIcon} />
+      <Image height={50} src={process.env.PUBLIC_URL + typeIcon} />
       <Flex
         direction={"row"}
         maxWidth={55 * numCols}
