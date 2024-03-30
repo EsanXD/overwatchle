@@ -17,15 +17,16 @@ import {
   Spacer,
   Button,
 } from "@chakra-ui/react";
-import { abilities } from "./consts";
+import { abilities } from "../util/consts";
 import { HeroSelect } from "./HeroSelect";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { dailyWord } from "./interfaces";
+import { dailyWord } from "../util/interfaces";
+import { ScoreModal } from "../modals/Score";
 
 export const App = () => {
   const [modalActive, setModalActive] = useState(false);
-  const [points, setPoints] = useState(0);
+  const [score, setScore] = useState(0);
   const [data, setData] = useState<dailyWord[]>([]);
   const [selectedCharcter, setCharacter] = useState("");
   const [ability, setAbility] = useState("");
@@ -41,19 +42,19 @@ export const App = () => {
   };
 
   const handleSubmit = () => {
-    console.log("submitting");
     if (!selectedCharcter || !ability) return;
     let pointsGained = 0;
     if (sanitizeText(ability) === sanitizeText(data[turn].ability)) {
-      pointsGained += 1;
-    }
-    if (sanitizeText(selectedCharcter) === sanitizeText(data[turn].hero)) {
       pointsGained += 2;
     }
-    setPoints(points + pointsGained);
+    if (sanitizeText(selectedCharcter) === sanitizeText(data[turn].hero)) {
+      pointsGained += 1;
+    }
+    setScore(score + pointsGained);
     setAbility("");
     setTurn(turn + 1);
-    setModalActive(false);
+    setCharacter("");
+    setModalActive(true);
   };
 
   useEffect(() => {
@@ -71,7 +72,9 @@ export const App = () => {
     fetchData();
   }, []);
 
-  return (
+  return data.length === 0 ? (
+    <></>
+  ) : (
     <Flex
       bg={"gray"}
       flexGrow={1}
@@ -82,6 +85,16 @@ export const App = () => {
       gap={8}
       p={8}
     >
+      {modalActive && (
+        <ScoreModal
+          turn={turn - 1}
+          data={data}
+          onClose={() => {
+            setModalActive(false);
+          }}
+          score={score}
+        />
+      )}
       <Spacer />
       <Heading>Stage {turn + 1}</Heading>
       <Stepper index={turn} colorScheme="blue">

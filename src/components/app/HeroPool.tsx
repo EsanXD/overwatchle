@@ -1,45 +1,7 @@
-import { Flex, Image, IconButton } from "@chakra-ui/react";
-import { tank, dps, support } from "./characters";
+import { Flex, IconButton, Image } from "@chakra-ui/react";
+import { tank, dps, support } from "../util/characters";
 
-export const HeroSelect = ({
-  selected,
-  setCharacterGuess,
-}: {
-  selected: string;
-  setCharacterGuess: any;
-}) => {
-  return (
-    <Flex
-      flexDirection={"row"}
-      gap={4}
-      wrap={"wrap"}
-      height={"auto"}
-      justifyContent={"center"}
-      flexGrow={1}
-    >
-      <HeroPool
-        selected={selected}
-        setCharacterGuess={setCharacterGuess}
-        numCols={6}
-        type={"tank"}
-      />
-      <HeroPool
-        selected={selected}
-        setCharacterGuess={setCharacterGuess}
-        numCols={9}
-        type={"dps"}
-      />
-      <HeroPool
-        selected={selected}
-        setCharacterGuess={setCharacterGuess}
-        numCols={5}
-        type={"support"}
-      />
-    </Flex>
-  );
-};
-
-const HeroPool = ({
+export const HeroPool = ({
   selected,
   numCols,
   type,
@@ -79,7 +41,6 @@ const HeroPool = ({
               height={50}
               width={50}
               onClick={() => {
-                console.log(character.name);
                 setCharacterGuess(character.name);
               }}
             >

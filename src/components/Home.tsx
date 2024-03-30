@@ -1,8 +1,8 @@
 import React from "react";
 import { Flex } from "@chakra-ui/react";
-import { Styles } from "./interfaces";
+import { Styles } from "./util/interfaces";
 import { Header } from "./Header";
-import { App } from "./App";
+import { App } from "./app/App";
 import { Footer } from "./Footer";
 
 const Home = () => {
