@@ -11,6 +11,8 @@ import {
   Spacer,
   Button,
   Text,
+  Skeleton,
+  Switch,
 } from "@chakra-ui/react";
 import { styles } from "../util/consts";
 import { HeroSelect } from "./HeroSelect";
@@ -33,6 +35,7 @@ export const App = ({
   const [ability, setAbility] = useState("");
   const [turn, setTurn] = useState(0);
   const [guesses, setGuesses] = useState<string[]>([]);
+  const [easyMode, setEasyMode] = useState(false);
   const handleChange = (event: React.FormEvent<HTMLInputElement>) =>
     setAbility(event.currentTarget.value);
   const setCharacterGuess = (character: string) => {
@@ -44,7 +47,8 @@ export const App = ({
   };
 
   const handleSubmit = () => {
-    if (!selectedCharcter || !ability) return;
+    if (!selectedCharcter || !ability || turn === 3 || data.length === 0)
+      return;
     let pointsGained = 0;
     if (sanitizeText(ability) === sanitizeText(data[turn].ability)) {
       pointsGained += 2;
@@ -61,9 +65,7 @@ export const App = ({
     setModalActive(true);
   };
 
-  return data.length === 0 ? (
-    <></>
-  ) : (
+  return (
     <Flex
       bg={"rgba(229, 235, 244, .8)"}
       flexGrow={1}
@@ -73,6 +75,10 @@ export const App = ({
       gap={2}
       width={"100vw"}
     >
+      <Flex p={4} gap={1} alignSelf={"end"} alignItems={"center"}>
+        <Text style={styles.font}>EASY MODE</Text>
+        <Switch colorScheme="orange"></Switch>
+      </Flex>
       {modalActive && (
         <ScoreModal
           turn={turn - 1}
@@ -83,7 +89,6 @@ export const App = ({
           score={score}
         />
       )}
-      <Spacer />
 
       {turn === 3 && (
         <>
@@ -95,8 +100,6 @@ export const App = ({
                 <Text style={styles.font} textAlign={"left"}>
                   ACTUAL: {turn.hero.toUpperCase()} -{" "}
                   {turn.ability.toUpperCase()}
-                  <Spacer />
-                  GUESS: {guesses[index].toUpperCase()}
                 </Text>
               </Flex>
             ))}
@@ -118,10 +121,13 @@ export const App = ({
             ))}
           </Stepper>
           <Spacer />
-          <Image loading="lazy" width={"20vw"} src={data[turn].img} />
+          {data.length > 0 ? (
+            <Image loading="lazy" width={"20vw"} src={data[turn].img} />
+          ) : (
+            <Skeleton height="20px" />
+          )}
         </>
       )}
-      <Spacer />
       <Input
         maxWidth={"50vw"}
         value={ability}
@@ -134,7 +140,6 @@ export const App = ({
         gap={50}
         justifyContent={"center"}
         alignItems={"center"}
-        flexGrow={1}
       >
         <HeroSelect
           selected={selectedCharcter}

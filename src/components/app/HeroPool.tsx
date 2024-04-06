@@ -1,5 +1,16 @@
-import { Flex, IconButton, Image } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  IconButton,
+  Image,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+} from "@chakra-ui/react";
 import { tank, dps, support } from "../util/characters";
+import { styles } from "../util/consts";
 
 export const HeroPool = ({
   selected,
@@ -21,7 +32,12 @@ export const HeroPool = ({
       : "/Circle_Tank.svg";
 
   return (
-    <Flex gap={4} alignItems={"center"} justifyContent={"center"} height={{lg: 110, sm: 24, base: 16}}>
+    <Flex
+      gap={4}
+      alignItems={"center"}
+      justifyContent={"center"}
+      height={{ lg: 110, sm: 24, base: 16 }}
+    >
       <Image
         height={{ lg: 50, sm: 12, base: 8 }}
         src={process.env.PUBLIC_URL + typeIcon}
@@ -45,29 +61,54 @@ export const HeroPool = ({
         {characters.map((character) => {
           const isSelected = selected === character.name;
           return (
-            <IconButton
-              aria-label="Select Character"
-              key={character.name}
-              bgColor={"gray"}
-              height={{ lg: 50, sm: 38, base: 8 }}
-              maxWidth={{ lg: 50, sm: 38, base: 8 }}
-              minWidth={{ lg: 50, sm: 38, base: 8 }}
-              onClick={() => {
-                setCharacterGuess(character.name);
-              }}
-            >
-              <Image
-                height={{ lg: 50, sm: 38, base: 8 }}
-                width={{ lg: 50, sm: 38, base: 8 }}
-                borderY={"2px solid #fff"}
-                //TODO Expand to make look better
-                border={isSelected ? "4px solid gold" : ""}
-                borderRadius={"md"}
-                loading="lazy"
-                src={character.img}
-                alt={character.name}
-              />
-            </IconButton>
+            <Popover isOpen={isSelected} placement="bottom">
+              <PopoverTrigger>
+                <IconButton
+                  aria-label="Select Character"
+                  key={character.name}
+                  bgColor={isSelected ? "#f06414" : "gray"}
+                  height={{ lg: 50, sm: 38, base: 8 }}
+                  maxWidth={{ lg: 50, sm: 38, base: 8 }}
+                  minWidth={{ lg: 50, sm: 38, base: 8 }}
+                  transform={isSelected ? "scale(1.2)" : ""}
+                  zIndex={isSelected ? 1 : 0}
+                  onClick={() => {
+                    isSelected
+                      ? setCharacterGuess("")
+                      : setCharacterGuess(character.name);
+                  }}
+                >
+                  <Image
+                    height={{ lg: 50, sm: 38, base: 8 }}
+                    width={{ lg: 50, sm: 38, base: 8 }}
+                    borderY={"2px solid #fff"}
+                    backgroundImage={
+                      isSelected
+                        ? "radial-gradient(circle, #ff9c00,#ff9c00, #f06414, #ffff32)"
+                        : ""
+                    }
+                    border={isSelected ? "2px solid #ffff32" : ""}
+                    transform={isSelected ? "scale(1.2)" : ""}
+                    borderRadius={"md"}
+                    loading="lazy"
+                    src={character.img}
+                    alt={character.name}
+                  />
+                </IconButton>
+              </PopoverTrigger>
+              <PopoverContent width={"auto"} display={"flex"} flexShrink={1}>
+                <PopoverBody>
+                  <Heading
+                    as="em"
+                    size={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
+                    style={styles.font}
+                    color={"#f06414"}
+                  >
+                    {character.name}
+                  </Heading>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
           );
         })}
       </Flex>
