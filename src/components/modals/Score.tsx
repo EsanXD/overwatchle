@@ -7,8 +7,10 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  Text,
 } from "@chakra-ui/react";
 import { dailyWord } from "../util/interfaces";
+import { styles } from "../util/consts";
 
 export const ScoreModal = ({
   data,
@@ -23,20 +25,28 @@ export const ScoreModal = ({
 }) => {
   return (
     <>
-      <Modal isOpen={true} onClose={onClose}>
+      <Modal isOpen={true} onClose={onClose} isCentered={true}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+        <ModalContent bg={"#43484c"}>
+          <ModalHeader style={styles.font} color={"#f99e1a"}>
+            MEOW!
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p>Score: {score}</p>
-            <p>Correct Ability: {data[turn].ability}</p>
-            <p>Correct Hero: {data[turn].hero}</p>
+            <Text style={styles.font} color={"#218ffe"}>
+              SCORE: {score}
+            </Text>
+            <Text style={styles.font} color={"#218ffe"}>
+              CORRECT ABILITY: {data[turn].ability.toUpperCase()}
+            </Text>
+            <Text style={styles.font} color={"#218ffe"}>
+              CORRECT HERO: {data[turn].hero.toUpperCase()}
+            </Text>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="yellow" mr={3} onClick={onClose}>
-              Yippee
+            <Button bg={"#f99e1a"} color={"white"} mr={3} onClick={onClose}>
+              <Text style={styles.font}>YIPPEEEE</Text>
             </Button>
           </ModalFooter>
         </ModalContent>

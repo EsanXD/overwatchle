@@ -71,6 +71,25 @@ export const App = ({
     setModalActive(true);
   };
 
+  const handleSubmitEndless = () => {
+    if (!selectedCharcter || !ability || turn === 3 || data.length === 0)
+      return;
+    let pointsGained = 0;
+    if (sanitizeText(ability) === sanitizeText(data[turn].ability)) {
+      pointsGained += 2;
+    }
+    if (sanitizeText(selectedCharcter) === sanitizeText(data[turn].hero)) {
+      pointsGained += 1;
+    }
+    setScore(score + pointsGained);
+    setScores([...scores, pointsGained]);
+    setAbility("");
+    setTurn(turn + 1);
+    setGuesses([...guesses, `${selectedCharcter}: ${ability}`]);
+    setCharacter("");
+    setModalActive(true);
+  };
+
   return (
     <Flex
       bg={"rgba(229, 235, 244, .8)"}
@@ -142,6 +161,7 @@ export const App = ({
           disabled={selectedCharcter === ""}
           maxWidth={"50vw"}
           onChange={handleChangeEasy}
+          style={styles.font}
         >
           {abilities
             .filter(
@@ -158,7 +178,8 @@ export const App = ({
           maxWidth={"50vw"}
           value={ability}
           onChange={handleChange}
-          placeholder="Guess the ability"
+          style={styles.font}
+          placeholder="GUESS THE ABILITY"
         />
       )}
       <Flex
