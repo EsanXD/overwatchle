@@ -924,6 +924,36 @@ export const abilities = [
     ability: "PRIMAL RAGE",
   },
   {
+    hero: "wrecking ball",
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/12339775bfc5bfb8a4ad735a2eef452992e90f5374d341baf09f19bc9968147a.png",
+    ability: "QUAD CANNONS",
+  },
+  {
+    hero: "wrecking ball",
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/e81e6ba9fb3391f29528021e453a0d3c16da1fc5e378994e6d00783356e0f2c9.png",
+    ability: "GRAPPLING CLAW",
+  },
+  {
+    hero: "wrecking ball",
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/b7f7e90bf3c3f26704133263896bded18e523e29dad2fe04c5f3c1bfa4472579.png",
+    ability: "ROLL",
+  },
+  {
+    hero: "wrecking ball",
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/3e884373721448d109c1646599cfe651a5bccdbc7a12d5062372c91b28acd80c.png",
+    ability: "PILEDRIVER",
+  },
+  {
+    hero: "wrecking ball",
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/fa65af9c692405f968fafbeedcdfc9092b38a050dc3562bd41280390ccd7a21d.png",
+    ability: "ADAPTIVE SHIELD",
+  },
+  {
+    hero: "wrecking ball",
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/17a54a345b715bc4301b330d8eb394f57e1c66308a8cba67f426de76a71ba868.png",
+    ability: "MINEFIELD",
+  },
+  {
     hero: "zarya",
     img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/02aebadea29904eca48f514437522f9f3a52ea266e6c2b2688dad39641071bda.png",
     ability: "PARTICLE CANNON",

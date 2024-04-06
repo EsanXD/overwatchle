@@ -13,8 +13,9 @@ import {
   Text,
   Skeleton,
   Switch,
+  Select,
 } from "@chakra-ui/react";
-import { styles } from "../util/consts";
+import { abilities, styles } from "../util/consts";
 import { HeroSelect } from "./HeroSelect";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -36,8 +37,13 @@ export const App = ({
   const [turn, setTurn] = useState(0);
   const [guesses, setGuesses] = useState<string[]>([]);
   const [easyMode, setEasyMode] = useState(false);
+
   const handleChange = (event: React.FormEvent<HTMLInputElement>) =>
     setAbility(event.currentTarget.value);
+
+  const handleChangeEasy = (event: any) =>
+    setAbility(event.currentTarget.value);
+
   const setCharacterGuess = (character: string) => {
     setCharacter(character);
   };
@@ -77,7 +83,10 @@ export const App = ({
     >
       <Flex p={4} gap={1} alignSelf={"end"} alignItems={"center"}>
         <Text style={styles.font}>EASY MODE</Text>
-        <Switch colorScheme="orange"></Switch>
+        <Switch
+          colorScheme="orange"
+          onChange={(event) => setEasyMode(event.target.checked)}
+        ></Switch>
       </Flex>
       {modalActive && (
         <ScoreModal
@@ -120,7 +129,6 @@ export const App = ({
               </Step>
             ))}
           </Stepper>
-          <Spacer />
           {data.length > 0 ? (
             <Image loading="lazy" width={"20vw"} src={data[turn].img} />
           ) : (
@@ -128,18 +136,38 @@ export const App = ({
           )}
         </>
       )}
-      <Input
-        maxWidth={"50vw"}
-        value={ability}
-        onChange={handleChange}
-        placeholder="Guess the ability"
-      />
+      <Spacer />
+      {easyMode ? (
+        <Select
+          disabled={selectedCharcter === ""}
+          maxWidth={"50vw"}
+          onChange={handleChangeEasy}
+        >
+          {abilities
+            .filter(
+              (hero) =>
+                sanitizeText(hero.hero.toUpperCase()) ===
+                sanitizeText(selectedCharcter.toUpperCase())
+            )
+            .map((hero) => (
+              <option value={hero.ability}>{hero.ability.toUpperCase()}</option>
+            ))}
+        </Select>
+      ) : (
+        <Input
+          maxWidth={"50vw"}
+          value={ability}
+          onChange={handleChange}
+          placeholder="Guess the ability"
+        />
+      )}
       <Flex
         direction={"row"}
         wrap={"wrap"}
         gap={50}
         justifyContent={"center"}
         alignItems={"center"}
+        flexGrow={1}
       >
         <HeroSelect
           selected={selectedCharcter}
