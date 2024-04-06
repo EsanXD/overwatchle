@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Flex } from "@chakra-ui/react";
-import { Styles, dailyWord as DailyWord } from "./util/interfaces";
+import { Styles, DailyWord as DailyWord } from "./util/interfaces";
 import { Header } from "./Header";
 import { App } from "./app/App";
 import { Menu } from "./menu/Menu";

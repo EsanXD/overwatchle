@@ -1,7 +1,7 @@
 export interface Styles {
   [key: string]: React.CSSProperties;
 }
-export interface dailyWord {
+export interface DailyWord {
   hero: string;
   ability: string;
   img: string;

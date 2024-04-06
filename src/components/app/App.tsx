@@ -2,11 +2,6 @@ import {
   Flex,
   Input,
   Image,
-  Step,
-  StepIcon,
-  StepIndicator,
-  StepSeparator,
-  Stepper,
   Heading,
   Spacer,
   Button,
@@ -15,21 +10,27 @@ import {
   Switch,
   Select,
 } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import { abilities, styles } from "../util/consts";
 import { HeroSelect } from "./HeroSelect";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { dailyWord } from "../util/interfaces";
+import { useState } from "react";
+import { DailyWord } from "../util/interfaces";
 import { ScoreModal } from "../modals/Score";
+import { EndlessModal } from "../modals/Endless";
+
+const ModalStates = {
+  SHOW_SCORE: "showScore",
+  GAME_OVER: "gameOver",
+};
 
 export const App = ({
   data,
   endless,
 }: {
-  data: dailyWord[];
+  data: DailyWord[];
   endless: boolean;
 }) => {
-  const [modalActive, setModalActive] = useState(false);
+  const [modalActive, setModalActive] = useState<any>(undefined);
   const [score, setScore] = useState(0);
   const [scores, setScores] = useState<number[]>([]);
   const [selectedCharcter, setCharacter] = useState("");
@@ -37,12 +38,18 @@ export const App = ({
   const [turn, setTurn] = useState(0);
   const [guesses, setGuesses] = useState<string[]>([]);
   const [easyMode, setEasyMode] = useState(false);
+  const [endlessData, setEndlessData] = useState<DailyWord>(
+    abilities[Math.floor((Math.random() * 100000) % abilities.length)]
+  );
+  const [previousData, setPreviousData] = useState<DailyWord>(endlessData);
+  const [strikes, setStrikes] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
 
-  const handleChange = (event: React.FormEvent<HTMLInputElement>) =>
-    setAbility(event.currentTarget.value);
-
-  const handleChangeEasy = (event: any) =>
-    setAbility(event.currentTarget.value);
+  const handleChange = (
+    event:
+      | React.FormEvent<HTMLInputElement>
+      | React.FormEvent<HTMLSelectElement>
+  ) => setAbility(event.currentTarget.value);
 
   const setCharacterGuess = (character: string) => {
     setCharacter(character);
@@ -50,6 +57,21 @@ export const App = ({
 
   const sanitizeText = (text: string) => {
     return text.replace(/[^a-zA-Z]/g, "").toLowerCase();
+  };
+
+  const getStrikeIcons = () => {
+    let icons = [];
+    for (let i = 0; i < 5; i++) {
+      icons.push(
+        i < strikes ? (
+          <CloseIcon color={"red"} />
+        ) : (
+          <CloseIcon color={"green"} />
+        )
+      );
+    }
+
+    return icons;
   };
 
   const handleSubmit = () => {
@@ -62,32 +84,39 @@ export const App = ({
     if (sanitizeText(selectedCharcter) === sanitizeText(data[turn].hero)) {
       pointsGained += 1;
     }
+    setPreviousData(data[turn]);
     setScore(score + pointsGained);
     setScores([...scores, pointsGained]);
     setAbility("");
     setTurn(turn + 1);
     setGuesses([...guesses, `${selectedCharcter}: ${ability}`]);
     setCharacter("");
-    setModalActive(true);
+    setModalActive(ModalStates.SHOW_SCORE);
   };
 
   const handleSubmitEndless = () => {
-    if (!selectedCharcter || !ability || turn === 3 || data.length === 0)
-      return;
-    let pointsGained = 0;
-    if (sanitizeText(ability) === sanitizeText(data[turn].ability)) {
-      pointsGained += 2;
+    if (!selectedCharcter || !ability) return;
+    let pointsLost = 0;
+    if (sanitizeText(ability) !== sanitizeText(endlessData.ability)) {
+      pointsLost += 1;
     }
-    if (sanitizeText(selectedCharcter) === sanitizeText(data[turn].hero)) {
-      pointsGained += 1;
+    if (sanitizeText(selectedCharcter) !== sanitizeText(endlessData.hero)) {
+      pointsLost += 2;
     }
-    setScore(score + pointsGained);
-    setScores([...scores, pointsGained]);
+    setPreviousData(endlessData);
+    setEndlessData(
+      abilities[Math.floor((Math.random() * 100000) % abilities.length)]
+    );
     setAbility("");
+    setStrikes(strikes + pointsLost);
     setTurn(turn + 1);
-    setGuesses([...guesses, `${selectedCharcter}: ${ability}`]);
     setCharacter("");
-    setModalActive(true);
+    if (strikes + pointsLost >= 5) {
+      setGameOver(true);
+      setModalActive(ModalStates.GAME_OVER);
+    } else {
+      setModalActive(ModalStates.SHOW_SCORE);
+    }
   };
 
   return (
@@ -107,51 +136,60 @@ export const App = ({
           onChange={(event) => setEasyMode(event.target.checked)}
         ></Switch>
       </Flex>
-      {modalActive && (
+      {modalActive === ModalStates.SHOW_SCORE && (
         <ScoreModal
-          turn={turn - 1}
-          data={data}
+          endless={endless}
+          data={previousData}
           onClose={() => {
-            setModalActive(false);
+            setModalActive(undefined);
           }}
           score={score}
         />
       )}
-
-      {turn === 3 && (
-        <>
-          <Heading style={styles.font}>SCORE: {score}</Heading>
-          <Flex flexDirection={"row"} gap={4}>
-            {data.map((turn, index) => (
-              <Flex flexDirection={"column"} alignItems={"center"}>
-                <Image loading="lazy" width={"20vw"} src={turn.img} />
-                <Text style={styles.font} textAlign={"left"}>
-                  ACTUAL: {turn.hero.toUpperCase()} -{" "}
-                  {turn.ability.toUpperCase()}
-                </Text>
-              </Flex>
-            ))}
-          </Flex>
-        </>
+      {modalActive === ModalStates.GAME_OVER && (
+        <EndlessModal
+          turn={turn - 1}
+          onClose={() => {
+            setGameOver(false);
+            setStrikes(0);
+            setTurn(0);
+            setModalActive(undefined);
+          }}
+        />
       )}
 
-      {turn < 3 && (
+      <Heading style={styles.font}>STAGE {turn + 1}</Heading>
+      {endless ? (
         <>
-          <Heading style={styles.font}>STAGE {turn + 1}</Heading>
-          <Stepper index={turn} colorScheme="blue">
-            {data.map((step, index) => (
-              <Step key={index}>
-                <StepIndicator>
-                  <StepIcon boxSize={6} />
-                </StepIndicator>
-                <StepSeparator />
-              </Step>
-            ))}
-          </Stepper>
-          {data.length > 0 ? (
-            <Image loading="lazy" width={"20vw"} src={data[turn].img} />
-          ) : (
-            <Skeleton height="20px" />
+          <Flex>{getStrikeIcons()}</Flex>
+          <Image loading="lazy" width={"20vw"} src={endlessData.img} />
+        </>
+      ) : (
+        <>
+          {turn === 3 && (
+            <>
+              <Flex flexDirection={"row"} gap={4}>
+                {data.map((turn, index) => (
+                  <Flex flexDirection={"column"} alignItems={"center"}>
+                    <Image loading="lazy" width={"20vw"} src={turn.img} />
+                    <Text style={styles.font} textAlign={"left"}>
+                      ACTUAL: {turn.hero.toUpperCase()} -{" "}
+                      {turn.ability.toUpperCase()}
+                    </Text>
+                  </Flex>
+                ))}
+              </Flex>
+            </>
+          )}
+
+          {turn < 3 && (
+            <>
+              {data.length > 0 ? (
+                <Image loading="lazy" width={"20vw"} src={data[turn].img} />
+              ) : (
+                <Skeleton height="20px" />
+              )}
+            </>
           )}
         </>
       )}
@@ -160,8 +198,10 @@ export const App = ({
         <Select
           disabled={selectedCharcter === ""}
           maxWidth={"50vw"}
-          onChange={handleChangeEasy}
+          value={ability}
+          onChange={handleChange}
           style={styles.font}
+          bg={"rgb(229, 235, 244)"}
         >
           {abilities
             .filter(
@@ -197,7 +237,7 @@ export const App = ({
       </Flex>
       <Button
         style={{ ...styles.primary, ...styles.font }}
-        onClick={handleSubmit}
+        onClick={endless ? handleSubmitEndless : handleSubmit}
         my={4}
       >
         SUBMIT GUESS

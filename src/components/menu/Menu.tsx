@@ -50,7 +50,7 @@ export const Menu = ({
               "font-size 0.3s ease-in-out, transform 0.3s ease-in-out",
           }}
           onClick={() => {
-            setEndless(false);
+            setEndless(true);
             showMenu(false);
           }}
         >

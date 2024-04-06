@@ -9,18 +9,13 @@ import {
   Button,
   Text,
 } from "@chakra-ui/react";
-import { DailyWord } from "../util/interfaces";
 import { styles } from "../util/consts";
 
-export const ScoreModal = ({
-  data,
-  score,
-  endless,
+export const EndlessModal = ({
+  turn,
   onClose,
 }: {
-  data: DailyWord;
-  score: number;
-  endless: boolean;
+  turn: number;
   onClose: () => void;
 }) => {
   return (
@@ -29,26 +24,17 @@ export const ScoreModal = ({
         <ModalOverlay />
         <ModalContent bg={"#43484c"}>
           <ModalHeader style={styles.font} color={"#f99e1a"}>
-            NEXT ROUND!
+            YOU LOSE!
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {!endless && (
-              <Text style={styles.font} color={"#218ffe"}>
-                SCORE: {score}
-              </Text>
-            )}
             <Text style={styles.font} color={"#218ffe"}>
-              CORRECT ABILITY: {data.ability.toUpperCase()}
-            </Text>
-            <Text style={styles.font} color={"#218ffe"}>
-              CORRECT HERO: {data.hero.toUpperCase()}
+              YOU MADE IT TO TURN {turn}
             </Text>
           </ModalBody>
-
           <ModalFooter>
             <Button bg={"#f99e1a"} color={"white"} mr={3} onClick={onClose}>
-              <Text style={styles.font}>YIPPEEEE</Text>
+              <Text style={styles.font}>WOMP WOMP</Text>
             </Button>
           </ModalFooter>
         </ModalContent>
