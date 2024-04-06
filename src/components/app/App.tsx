@@ -1,21 +1,16 @@
 import {
-  Box,
   Flex,
   Input,
   Image,
   Step,
-  StepDescription,
   StepIcon,
   StepIndicator,
-  StepNumber,
   StepSeparator,
-  StepStatus,
-  StepTitle,
   Stepper,
-  useSteps,
   Heading,
   Spacer,
   Button,
+  Text,
 } from "@chakra-ui/react";
 import { styles } from "../util/consts";
 import { HeroSelect } from "./HeroSelect";
@@ -24,13 +19,20 @@ import axios from "axios";
 import { dailyWord } from "../util/interfaces";
 import { ScoreModal } from "../modals/Score";
 
-export const App = () => {
+export const App = ({
+  data,
+  endless,
+}: {
+  data: dailyWord[];
+  endless: boolean;
+}) => {
   const [modalActive, setModalActive] = useState(false);
   const [score, setScore] = useState(0);
-  const [data, setData] = useState<dailyWord[]>([]);
+  const [scores, setScores] = useState<number[]>([]);
   const [selectedCharcter, setCharacter] = useState("");
   const [ability, setAbility] = useState("");
   const [turn, setTurn] = useState(0);
+  const [guesses, setGuesses] = useState<string[]>([]);
   const handleChange = (event: React.FormEvent<HTMLInputElement>) =>
     setAbility(event.currentTarget.value);
   const setCharacterGuess = (character: string) => {
@@ -51,38 +53,25 @@ export const App = () => {
       pointsGained += 1;
     }
     setScore(score + pointsGained);
+    setScores([...scores, pointsGained]);
     setAbility("");
     setTurn(turn + 1);
+    setGuesses([...guesses, `${selectedCharcter}: ${ability}`]);
     setCharacter("");
     setModalActive(true);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://overwatchle-api.fly.dev/daily"
-        );
-        const resp = JSON.parse(atob(atob(atob(response.data))));
-        setData(resp);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
 
   return data.length === 0 ? (
     <></>
   ) : (
     <Flex
-      bg={"gray"}
+      bg={"rgba(229, 235, 244, .8)"}
       flexGrow={1}
       direction="column"
-      mx="auto"
       align="center"
       justify="space-between"
       gap={2}
+      width={"100vw"}
     >
       {modalActive && (
         <ScoreModal
@@ -95,25 +84,45 @@ export const App = () => {
         />
       )}
       <Spacer />
-      <Heading style={styles.font}>STAGE {turn + 1}</Heading>
-      <Stepper index={turn} colorScheme="blue">
-        {data.map((step, index) => (
-          <Step key={index}>
-            <StepIndicator>
-              <StepIcon boxSize={6} />
-            </StepIndicator>
-            <StepSeparator />
-          </Step>
-        ))}
-      </Stepper>
-      <Spacer />
-      {data.length > 0 && turn < 3 && (
-        <Image loading="lazy" width={"20vw"} src={data[turn].img} />
+
+      {turn === 3 && (
+        <>
+          <Heading style={styles.font}>SCORE: {score}</Heading>
+          <Flex flexDirection={"row"} gap={4}>
+            {data.map((turn, index) => (
+              <Flex flexDirection={"column"} alignItems={"center"}>
+                <Image loading="lazy" width={"20vw"} src={turn.img} />
+                <Text style={styles.font} textAlign={"left"}>
+                  ACTUAL: {turn.hero.toUpperCase()} -{" "}
+                  {turn.ability.toUpperCase()}
+                  <Spacer />
+                  GUESS: {guesses[index].toUpperCase()}
+                </Text>
+              </Flex>
+            ))}
+          </Flex>
+        </>
+      )}
+
+      {turn < 3 && (
+        <>
+          <Heading style={styles.font}>STAGE {turn + 1}</Heading>
+          <Stepper index={turn} colorScheme="blue">
+            {data.map((step, index) => (
+              <Step key={index}>
+                <StepIndicator>
+                  <StepIcon boxSize={6} />
+                </StepIndicator>
+                <StepSeparator />
+              </Step>
+            ))}
+          </Stepper>
+          <Spacer />
+          <Image loading="lazy" width={"20vw"} src={data[turn].img} />
+        </>
       )}
       <Spacer />
-      <Spacer />
       <Input
-        style={styles.secondary}
         maxWidth={"50vw"}
         value={ability}
         onChange={handleChange}

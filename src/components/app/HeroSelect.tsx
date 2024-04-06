@@ -11,7 +11,7 @@ export const HeroSelect = ({
   return (
     <Flex
       flexDirection={"row"}
-      gap={0}
+      gap={4}
       wrap={"wrap"}
       height={"auto"}
       justifyContent={"center"}

@@ -21,7 +21,7 @@ export const HeroPool = ({
       : "/Circle_Tank.svg";
 
   return (
-    <Flex gap={3} alignItems={"center"} justifyContent={"center"} height={{lg: 110, sm: 24, base: 16}}>
+    <Flex gap={4} alignItems={"center"} justifyContent={"center"} height={{lg: 110, sm: 24, base: 16}}>
       <Image
         height={{ lg: 50, sm: 12, base: 8 }}
         src={process.env.PUBLIC_URL + typeIcon}
