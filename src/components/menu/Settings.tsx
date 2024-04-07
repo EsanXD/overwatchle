@@ -30,17 +30,16 @@ export const Settings = ({
     <Drawer isOpen={true} placement="left" size={"lg"} onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent bgColor={"#43484c"}>
-        <Flex justifyContent={"space-between"} alignItems={"center"}>
-          <DrawerCloseButton />
-          <DrawerHeader
-            as={"em"}
-            fontSize={40}
-            color={"#f06414"}
-            style={styles.font}
-          >
-            SETTINGS
-          </DrawerHeader>
-        </Flex>
+        <DrawerCloseButton />
+        <DrawerHeader
+          as={"em"}
+          fontSize={40}
+          py={0}
+          color={"#f06414"}
+          style={styles.font}
+        >
+          SETTINGS
+        </DrawerHeader>
 
         <DrawerBody>
           <Flex
@@ -64,6 +63,7 @@ export const Settings = ({
                   colorScheme={"orange"}
                   width={"100%"}
                   borderRadius={0}
+                  fontSize={{ base: "xs", sm: "sm", md: "xl", lg: "2xl" }}
                 >
                   {"MAIN MENU"}
                 </Button>
@@ -85,6 +85,7 @@ export const Settings = ({
                   width={"100%"}
                   style={styles.font}
                   borderRadius={0}
+                  fontSize={{ base: "xs", sm: "sm", md: "xl", lg: "2xl" }}
                 >
                   {easyMode ? "EASY MODE" : "HARD MODE"}
                 </Button>
@@ -110,6 +111,7 @@ export const Settings = ({
                   colorScheme={"orange"}
                   width={"100%"}
                   borderRadius={0}
+                  fontSize={{ base: "xs", sm: "sm", md: "xl", lg: "2xl" }}
                 >
                   {"HOW TO PLAY"}
                 </Button>

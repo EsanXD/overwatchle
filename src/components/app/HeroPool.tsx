@@ -18,12 +18,14 @@ export const HeroPool = ({
   type,
   setCharacterGuess,
   isDisabled,
+  isLargeSize,
 }: {
   selected: string;
   numCols: number;
   type: string;
   setCharacterGuess: any;
   isDisabled: boolean;
+  isLargeSize?: boolean;
 }) => {
   const characters = type === "support" ? support : type === "dps" ? dps : tank;
   const typeIcon =
@@ -35,15 +37,14 @@ export const HeroPool = ({
 
   return (
     <Flex
-      gap={4}
+      gap={isLargeSize ? 4 : 1}
       alignItems={"center"}
       justifyContent={"center"}
       height={{ lg: 110, sm: 24, base: 16 }}
     >
-      <Image
-        height={{ lg: 50, sm: 12, base: 8 }}
-        src={process.env.PUBLIC_URL + typeIcon}
-      />
+      {isLargeSize && (
+        <Image height={50} src={process.env.PUBLIC_URL + typeIcon} />
+      )}
       <Flex
         direction={"row"}
         maxWidth={{

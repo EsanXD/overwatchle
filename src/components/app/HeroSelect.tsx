@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, useBreakpointValue } from "@chakra-ui/react";
 import { HeroPool } from "./HeroPool";
 
 export const HeroSelect = ({
@@ -10,10 +10,12 @@ export const HeroSelect = ({
   setCharacterGuess: any;
   isDisabled: boolean;
 }) => {
+  const isLargeSize = useBreakpointValue({ base: false, md: false, lg: true });
+
   return (
     <Flex
       flexDirection={"row"}
-      gap={4}
+      gap={isLargeSize ? 4 : 0}
       wrap={"wrap"}
       height={"auto"}
       justifyContent={"center"}
@@ -23,6 +25,7 @@ export const HeroSelect = ({
     >
       <HeroPool
         isDisabled={isDisabled}
+        isLargeSize={isLargeSize}
         selected={selected}
         setCharacterGuess={setCharacterGuess}
         numCols={6}
@@ -30,6 +33,7 @@ export const HeroSelect = ({
       />
       <HeroPool
         isDisabled={isDisabled}
+        isLargeSize={isLargeSize}
         selected={selected}
         setCharacterGuess={setCharacterGuess}
         numCols={9}
@@ -37,6 +41,7 @@ export const HeroSelect = ({
       />
       <HeroPool
         isDisabled={isDisabled}
+        isLargeSize={isLargeSize}
         selected={selected}
         setCharacterGuess={setCharacterGuess}
         numCols={5}

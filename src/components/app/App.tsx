@@ -63,8 +63,6 @@ export const App = ({
   const [gameOver, setGameOver] = useState(false);
   const [availableAbilities, setAvailableAbilities] = useState<DailyWord[]>([]);
 
-  const isLargeSize = useBreakpointValue({ base: false, lg: true });
-
   useEffect(() => {
     const available = abilities.filter(
       (hero) =>
@@ -158,36 +156,35 @@ export const App = ({
       gap={2}
       width={"100vw"}
     >
-      {/* <Flex p={4} gap={1} alignSelf={"end"} alignItems={"center"}>
-        <Text style={styles.font}>EASY MODE</Text>
-        <Switch
-          colorScheme="orange"
-          onChange={(event) => setEasyMode(event.target.checked)}
-        ></Switch>
-      </Flex> */}
-
       <Flex justifyContent={"center"} alignItems={"center"}>
         <IconButton
           position={"absolute"}
           left={4}
           aria-label="settings"
+          colorScheme="orange"
           onClick={() => setSettingsOpen(true)}
           icon={<HamburgerIcon />}
         />
         <Flex flexDirection={"column"} alignItems={"center"}>
           {gameOver ? (
-            <Heading style={styles.font}>GAME OVER</Heading>
+            <Heading as="em" style={styles.font}>
+              GAME OVER
+            </Heading>
           ) : (
-            <Heading style={styles.font}>STAGE {turn + 1}</Heading>
+            <Heading as="em" style={styles.font}>
+              STAGE {turn + 1}
+            </Heading>
           )}
-          <Heading style={styles.font}>SCORE: {score}</Heading>
+          <Heading as="em" style={styles.font}>
+            SCORE: {score}
+          </Heading>
+          {endless && <Flex>{getStrikeIcons()}</Flex>}
         </Flex>
       </Flex>
-      {endless && <Flex>{getStrikeIcons()}</Flex>}
       {(endless || (!endless && turn < 3 && data.length > 0)) && (
         <Image
           loading="lazy"
-          width={"40vw"}
+          width={"30vh"}
           src={endless ? endlessData.img : data[turn].img}
         />
       )}
@@ -254,8 +251,9 @@ export const App = ({
       </Flex>
       <Button
         style={{ ...styles.primary, ...styles.font }}
-        onClick={endless ? handleSubmitEndless : handleSubmit}
+        size={{ base: "sm", sm: "md", md: "lg", lg: "lg" }}
         my={4}
+        onClick={endless ? handleSubmitEndless : handleSubmit}
       >
         SUBMIT GUESS
       </Button>
