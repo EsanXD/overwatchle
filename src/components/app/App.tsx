@@ -29,6 +29,7 @@ import { DailyWord } from "../util/interfaces";
 import { ScoreModal } from "../modals/Score";
 import { EndlessModal } from "../modals/Endless";
 import { TutorialModal } from "../modals/Tutorial";
+import { Settings } from "../menu/Settings";
 
 const ModalStates = {
   TUTORIAL: "tutorial",
@@ -45,7 +46,7 @@ export const App = ({
   endless: boolean;
   back: any;
 }) => {
-  const [openMenu, setOpenMenu] = useState<boolean>(false);
+  const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
   const [modalActive, setModalActive] = useState<any>(ModalStates.TUTORIAL);
   const [score, setScore] = useState(0);
   const [scores, setScores] = useState<number[]>([]);
@@ -170,7 +171,7 @@ export const App = ({
           position={"absolute"}
           left={4}
           aria-label="settings"
-          onClick={() => setOpenMenu(true)}
+          onClick={() => setSettingsOpen(true)}
           icon={<HamburgerIcon />}
         />
         <Flex flexDirection={"column"} alignItems={"center"}>
@@ -283,111 +284,15 @@ export const App = ({
       {modalActive === ModalStates.TUTORIAL && (
         <TutorialModal onClose={() => setModalActive(undefined)} />
       )}
-      <Drawer
-        isOpen={openMenu}
-        placement="left"
-        size={"lg"}
-        onClose={() => {
-          setOpenMenu(false);
-        }}
-      >
-        <DrawerOverlay />
-        <DrawerContent bgColor={"#43484c"}>
-          <Flex justifyContent={"space-between"} alignItems={"center"}>
-            <DrawerCloseButton />
-            <DrawerHeader
-              as={"em"}
-              fontSize={40}
-              color={"#f06414"}
-              style={styles.font}
-            >
-              SETTINGS
-            </DrawerHeader>
-          </Flex>
-
-          <DrawerBody>
-            <Flex
-              width={"100%"}
-              flexDirection={"column"}
-              gap={4}
-              justifyContent={"center"}
-              alignItems={"center"}
-            >
-              <Card
-                maxW="sm"
-                onClick={() => {
-                  setOpenMenu(false);
-                  back();
-                }}
-              >
-                <CardBody p={1}>
-                  <Image
-                    src={
-                      "https://th.bing.com/th/id/OIG2.zYj6BYTMhJfHxsXuY3pw?pid=ImgGn"
-                    }
-                    alt="alt"
-                    height={"20vh"}
-                  />
-                  <Button
-                    style={styles.font}
-                    colorScheme={"orange"}
-                    width={"100%"}
-                    borderRadius={0}
-                  >
-                    {"MAIN MENU"}
-                  </Button>
-                </CardBody>
-              </Card>
-              <Card maxW="sm" onClick={() => setEasyMode(!easyMode)}>
-                <CardBody p={1}>
-                  <Image
-                    src={
-                      easyMode
-                        ? "https://th.bing.com/th/id/OIG2.WN6Zax33K7zE5SlbMgpM?pid=ImgGn"
-                        : "https://th.bing.com/th/id/OIG2.LMMJuEtWjNBYeQT0Akye?pid=ImgGn"
-                    }
-                    alt="alt"
-                    height={"20vh"}
-                  />
-                  <Button
-                    colorScheme={easyMode ? "blue" : "red"}
-                    width={"100%"}
-                    style={styles.font}
-                    borderRadius={0}
-                  >
-                    {easyMode ? "EASY MODE" : "HARD MODE"}
-                  </Button>
-                </CardBody>
-              </Card>
-              <Card
-                maxW="sm"
-                onClick={() => {
-                  setOpenMenu(false);
-                  setModalActive(ModalStates.TUTORIAL);
-                }}
-              >
-                <CardBody p={1}>
-                  <Image
-                    src={
-                      "https://th.bing.com/th/id/OIG3._cVB3rXkyNU3O3x_DJWx?pid=ImgGn"
-                    }
-                    alt="alt"
-                    height={"20vh"}
-                  />
-                  <Button
-                    style={styles.font}
-                    colorScheme={"orange"}
-                    width={"100%"}
-                    borderRadius={0}
-                  >
-                    {"HOW TO PLAY"}
-                  </Button>
-                </CardBody>
-              </Card>
-            </Flex>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+      {settingsOpen && (
+        <Settings
+          easyMode={easyMode}
+          onClose={() => setSettingsOpen(false)}
+          openMenu={back}
+          openTutorial={() => setModalActive(ModalStates.TUTORIAL)}
+          toggleEasyMode={() => setEasyMode(!easyMode)}
+        />
+      )}
     </Flex>
   );
 };

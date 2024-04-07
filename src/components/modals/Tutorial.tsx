@@ -8,8 +8,6 @@ import {
   ModalCloseButton,
   Button,
   Text,
-  Spacer,
-  Heading,
 } from "@chakra-ui/react";
 import { styles } from "../util/consts";
 import { useState } from "react";
@@ -29,9 +27,8 @@ export const TutorialModal = ({ onClose }: { onClose: () => void }) => {
         return "YOU WILL GAIN POINTS FOR SELECTING THE CORRECT HERO AND ABILITY.";
       case 4:
         return "IF YOU ARE PLAYING ENDLESS YOU WILL LOSE LIVES FOR SELECTING THE INCORRECT HERO AND ABILITY.";
-
       default:
-        return <></>;
+        return "THAT'S IT! HAVE FUN PLAYING!";
     }
   };
 
