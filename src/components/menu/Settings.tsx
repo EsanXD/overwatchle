@@ -27,7 +27,7 @@ export const Settings = ({
   toggleEasyMode: () => void;
 }) => {
   return (
-    <Drawer isOpen={true} placement="left" size={"lg"} onClose={() => onClose}>
+    <Drawer isOpen={true} placement="left" size={"lg"} onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent bgColor={"#43484c"}>
         <Flex justifyContent={"space-between"} alignItems={"center"}>
