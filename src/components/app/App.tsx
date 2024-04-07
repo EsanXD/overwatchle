@@ -55,7 +55,10 @@ export const App = ({
         sanitizeText(selectedCharcter.toUpperCase())
     );
     setAvailableAbilities(available);
-    setAbility(available.length > 0 ? available[0].hero.toUpperCase() : "");
+    easyMode &&
+      setAbility(
+        available.length > 0 ? available[0].ability.toUpperCase() : ""
+      );
   }, [selectedCharcter]);
 
   const handleChange = (
