@@ -9,8 +9,19 @@ import {
   Skeleton,
   Switch,
   Select,
+  useBreakpointValue,
+  IconButton,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  CardBody,
+  Card,
 } from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
+import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { abilities, styles } from "../util/consts";
 import { HeroSelect } from "./HeroSelect";
 import { useEffect, useState } from "react";
@@ -28,10 +39,13 @@ const ModalStates = {
 export const App = ({
   data,
   endless,
+  back,
 }: {
   data: DailyWord[];
   endless: boolean;
+  back: any;
 }) => {
+  const [openMenu, setOpenMenu] = useState<boolean>(false);
   const [modalActive, setModalActive] = useState<any>(ModalStates.TUTORIAL);
   const [score, setScore] = useState(0);
   const [scores, setScores] = useState<number[]>([]);
@@ -47,6 +61,8 @@ export const App = ({
   const [strikes, setStrikes] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [availableAbilities, setAvailableAbilities] = useState<DailyWord[]>([]);
+
+  const isLargeSize = useBreakpointValue({ base: false, lg: true });
 
   useEffect(() => {
     const available = abilities.filter(
@@ -99,6 +115,7 @@ export const App = ({
     setScore(score + pointsGained);
     setScores([...scores, pointsGained]);
     setAbility("");
+    turn === 2 && setGameOver(true);
     setTurn(turn + 1);
     setGuesses([...guesses, `${selectedCharcter}: ${ability}`]);
     setCharacter("");
@@ -140,75 +157,62 @@ export const App = ({
       gap={2}
       width={"100vw"}
     >
-      <Flex p={4} gap={1} alignSelf={"end"} alignItems={"center"}>
+      {/* <Flex p={4} gap={1} alignSelf={"end"} alignItems={"center"}>
         <Text style={styles.font}>EASY MODE</Text>
         <Switch
           colorScheme="orange"
           onChange={(event) => setEasyMode(event.target.checked)}
         ></Switch>
-      </Flex>
-      {modalActive === ModalStates.SHOW_SCORE && (
-        <ScoreModal
-          endless={endless}
-          data={previousData}
-          onClose={() => {
-            setModalActive(undefined);
-          }}
-          score={score}
-        />
-      )}
-      {modalActive === ModalStates.GAME_OVER && (
-        <EndlessModal
-          turn={turn - 1}
-          onClose={() => {
-            setGameOver(false);
-            setStrikes(0);
-            setTurn(0);
-            setModalActive(undefined);
-          }}
-        />
-      )}
-      {modalActive === ModalStates.TUTORIAL && (
-        <TutorialModal onClose={() => setModalActive(undefined)} />
-      )}
-      {endless ? (
-        <>
-          <Heading style={styles.font}>STAGE {turn + 1}</Heading>
-          <Flex>{getStrikeIcons()}</Flex>
-          <Image loading="lazy" width={"20vw"} src={endlessData.img} />
-        </>
-      ) : (
-        <>
-          {turn === 3 && (
-            <>
-              <Heading style={styles.font}>GAME OVER</Heading>
-              <Heading style={styles.font}>SCORE: {score}</Heading>
-              <Flex flexDirection={"row"} gap={4}>
-                {data.map((turn, index) => (
-                  <Flex flexDirection={"column"} alignItems={"center"}>
-                    <Image loading="lazy" width={"20vw"} src={turn.img} />
-                    <Text style={styles.font} textAlign={"left"}>
-                      {turn.hero.toUpperCase()}: {turn.ability.toUpperCase()}
-                    </Text>
-                  </Flex>
-                ))}
-              </Flex>
-            </>
-          )}
+      </Flex> */}
 
-          {turn < 3 && (
-            <>
-              <Heading style={styles.font}>STAGE {turn + 1}</Heading>
-              {data.length > 0 ? (
-                <Image loading="lazy" width={"20vw"} src={data[turn].img} />
-              ) : (
-                <Skeleton height="20px" />
-              )}
-            </>
+      <Flex justifyContent={"center"} alignItems={"center"}>
+        <IconButton
+          position={"absolute"}
+          left={4}
+          aria-label="settings"
+          onClick={() => setOpenMenu(true)}
+          icon={<HamburgerIcon />}
+        />
+        <Flex flexDirection={"column"} alignItems={"center"}>
+          {gameOver ? (
+            <Heading style={styles.font}>GAME OVER</Heading>
+          ) : (
+            <Heading style={styles.font}>STAGE {turn + 1}</Heading>
           )}
-        </>
+          <Heading style={styles.font}>SCORE: {score}</Heading>
+        </Flex>
+      </Flex>
+      {endless && <Flex>{getStrikeIcons()}</Flex>}
+      {(endless || (!endless && turn < 3 && data.length > 0)) && (
+        <Image
+          loading="lazy"
+          width={"40vw"}
+          src={endless ? endlessData.img : data[turn].img}
+        />
       )}
-      <Spacer />
+      {gameOver && !endless && (
+        <Flex
+          flexDirection={"row"}
+          gap={4}
+          alignItems={"center"}
+          justifyContent={"space-between"}
+        >
+          {data.map((turn, index) => (
+            <Flex
+              flexDirection={"column"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              width={"30vw"}
+            >
+              <Image loading="lazy" width={"20vw"} src={turn.img} />
+              <Text style={styles.font} textAlign={"center"}>
+                {turn.hero.toUpperCase()}: {turn.ability.toUpperCase()}
+              </Text>
+            </Flex>
+          ))}
+        </Flex>
+      )}
+
       {easyMode ? (
         <Select
           disabled={selectedCharcter === "" || (turn === 3 && !endless)}
@@ -238,7 +242,6 @@ export const App = ({
         gap={50}
         justifyContent={"center"}
         alignItems={"center"}
-        flexGrow={1}
       >
         <HeroSelect
           isDisabled={turn === 3 && !endless}
@@ -255,6 +258,136 @@ export const App = ({
       >
         SUBMIT GUESS
       </Button>
+
+      {modalActive === ModalStates.SHOW_SCORE && (
+        <ScoreModal
+          endless={endless}
+          data={previousData}
+          onClose={() => {
+            setModalActive(undefined);
+          }}
+          score={score}
+        />
+      )}
+      {modalActive === ModalStates.GAME_OVER && (
+        <EndlessModal
+          turn={turn - 1}
+          onClose={() => {
+            setGameOver(false);
+            setStrikes(0);
+            setTurn(0);
+            setModalActive(undefined);
+          }}
+        />
+      )}
+      {modalActive === ModalStates.TUTORIAL && (
+        <TutorialModal onClose={() => setModalActive(undefined)} />
+      )}
+      <Drawer
+        isOpen={openMenu}
+        placement="left"
+        size={"lg"}
+        onClose={() => {
+          setOpenMenu(false);
+        }}
+      >
+        <DrawerOverlay />
+        <DrawerContent bgColor={"#43484c"}>
+          <Flex justifyContent={"space-between"} alignItems={"center"}>
+            <DrawerCloseButton />
+            <DrawerHeader
+              as={"em"}
+              fontSize={40}
+              color={"#f06414"}
+              style={styles.font}
+            >
+              SETTINGS
+            </DrawerHeader>
+          </Flex>
+
+          <DrawerBody>
+            <Flex
+              width={"100%"}
+              flexDirection={"column"}
+              gap={4}
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Card
+                maxW="sm"
+                onClick={() => {
+                  setOpenMenu(false);
+                  back();
+                }}
+              >
+                <CardBody p={1}>
+                  <Image
+                    src={
+                      "https://th.bing.com/th/id/OIG2.zYj6BYTMhJfHxsXuY3pw?pid=ImgGn"
+                    }
+                    alt="alt"
+                    height={"20vh"}
+                  />
+                  <Button
+                    style={styles.font}
+                    colorScheme={"orange"}
+                    width={"100%"}
+                    borderRadius={0}
+                  >
+                    {"MAIN MENU"}
+                  </Button>
+                </CardBody>
+              </Card>
+              <Card maxW="sm" onClick={() => setEasyMode(!easyMode)}>
+                <CardBody p={1}>
+                  <Image
+                    src={
+                      easyMode
+                        ? "https://th.bing.com/th/id/OIG2.WN6Zax33K7zE5SlbMgpM?pid=ImgGn"
+                        : "https://th.bing.com/th/id/OIG2.LMMJuEtWjNBYeQT0Akye?pid=ImgGn"
+                    }
+                    alt="alt"
+                    height={"20vh"}
+                  />
+                  <Button
+                    colorScheme={easyMode ? "blue" : "red"}
+                    width={"100%"}
+                    style={styles.font}
+                    borderRadius={0}
+                  >
+                    {easyMode ? "EASY MODE" : "HARD MODE"}
+                  </Button>
+                </CardBody>
+              </Card>
+              <Card
+                maxW="sm"
+                onClick={() => {
+                  setOpenMenu(false);
+                  setModalActive(ModalStates.TUTORIAL);
+                }}
+              >
+                <CardBody p={1}>
+                  <Image
+                    src={
+                      "https://th.bing.com/th/id/OIG3._cVB3rXkyNU3O3x_DJWx?pid=ImgGn"
+                    }
+                    alt="alt"
+                    height={"20vh"}
+                  />
+                  <Button
+                    style={styles.font}
+                    colorScheme={"orange"}
+                    width={"100%"}
+                    borderRadius={0}
+                  >
+                    {"HOW TO PLAY"}
+                  </Button>
+                </CardBody>
+              </Card>
+            </Flex>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </Flex>
   );
 };

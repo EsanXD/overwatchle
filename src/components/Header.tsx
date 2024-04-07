@@ -8,6 +8,7 @@ export const Header = () => {
       justify="center"
       width={"100vw"}
       bg={"rgba(229, 235, 244, .8)"}
+      px={4}
     >
       <Image
         src={process.env.PUBLIC_URL + "/OverwatchleLogo.png"}

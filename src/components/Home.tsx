@@ -47,7 +47,7 @@ const Home = () => {
       {showMenu ? (
         <Menu setEndless={setEndless} showMenu={setShowMenu} />
       ) : (
-        <App endless={endless} data={data} />
+        <App endless={endless} data={data} back={() => setShowMenu(true)} />
       )}
       {init && (
         <Particles
