@@ -25,7 +25,7 @@
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://esanxd.github.io/overwatchle/",
+  "homepage": "https://overwatchle.xyz/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

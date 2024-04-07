@@ -173,8 +173,7 @@ export const App = ({
                   <Flex flexDirection={"column"} alignItems={"center"}>
                     <Image loading="lazy" width={"20vw"} src={turn.img} />
                     <Text style={styles.font} textAlign={"left"}>
-                      ACTUAL: {turn.hero.toUpperCase()} -{" "}
-                      {turn.ability.toUpperCase()}
+                      {turn.hero.toUpperCase()}: {turn.ability.toUpperCase()}
                     </Text>
                   </Flex>
                 ))}
