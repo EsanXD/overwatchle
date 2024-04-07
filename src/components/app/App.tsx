@@ -13,7 +13,7 @@ import {
 import { CloseIcon } from "@chakra-ui/icons";
 import { abilities, styles } from "../util/consts";
 import { HeroSelect } from "./HeroSelect";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DailyWord } from "../util/interfaces";
 import { ScoreModal } from "../modals/Score";
 import { EndlessModal } from "../modals/Endless";
@@ -46,16 +46,23 @@ export const App = ({
   const [previousData, setPreviousData] = useState<DailyWord>(endlessData);
   const [strikes, setStrikes] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [availableAbilities, setAvailableAbilities] = useState<DailyWord[]>([]);
+
+  useEffect(() => {
+    const available = abilities.filter(
+      (hero) =>
+        sanitizeText(hero.hero.toUpperCase()) ===
+        sanitizeText(selectedCharcter.toUpperCase())
+    );
+    setAvailableAbilities(available);
+    setAbility(available.length > 0 ? available[0].hero.toUpperCase() : "");
+  }, [selectedCharcter]);
 
   const handleChange = (
     event:
       | React.FormEvent<HTMLInputElement>
       | React.FormEvent<HTMLSelectElement>
   ) => setAbility(event.currentTarget.value);
-
-  const setCharacterGuess = (character: string) => {
-    setCharacter(character);
-  };
 
   const sanitizeText = (text: string) => {
     return text.replace(/[^a-zA-Z]/g, "").toLowerCase();
@@ -208,15 +215,9 @@ export const App = ({
           style={styles.font}
           bg={"rgb(229, 235, 244)"}
         >
-          {abilities
-            .filter(
-              (hero) =>
-                sanitizeText(hero.hero.toUpperCase()) ===
-                sanitizeText(selectedCharcter.toUpperCase())
-            )
-            .map((hero) => (
-              <option value={hero.ability}>{hero.ability.toUpperCase()}</option>
-            ))}
+          {availableAbilities.map((hero) => (
+            <option value={hero.ability}>{hero.ability.toUpperCase()}</option>
+          ))}
         </Select>
       ) : (
         <Input
@@ -239,7 +240,9 @@ export const App = ({
         <HeroSelect
           isDisabled={turn === 3 && !endless}
           selected={selectedCharcter}
-          setCharacterGuess={setCharacterGuess}
+          setCharacterGuess={(character: string) => {
+            setCharacter(character);
+          }}
         />
       </Flex>
       <Button
