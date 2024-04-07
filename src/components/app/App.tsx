@@ -3,23 +3,10 @@ import {
   Input,
   Image,
   Heading,
-  Spacer,
   Button,
   Text,
-  Skeleton,
-  Switch,
   Select,
-  useBreakpointValue,
   IconButton,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  CardBody,
-  Card,
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { abilities, styles } from "../util/consts";
@@ -74,6 +61,7 @@ export const App = ({
       setAbility(
         available.length > 0 ? available[0].ability.toUpperCase() : ""
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCharcter]);
 
   const handleChange = (
