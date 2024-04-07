@@ -1,5 +1,7 @@
 import { Flex, Heading, Spacer } from "@chakra-ui/react";
 import { styles } from "../util/consts";
+import { TutorialModal } from "../modals/Tutorial";
+import { useState } from "react";
 
 export const Menu = ({
   setEndless,
@@ -8,6 +10,7 @@ export const Menu = ({
   setEndless: any;
   showMenu: any;
 }) => {
+  const [showTutorial, setShowTutorial] = useState(false);
   return (
     <>
       <Flex
@@ -18,6 +21,9 @@ export const Menu = ({
         alignItems={"start"}
         bg={"rgba(229, 235, 244, .8)"}
       >
+        {showTutorial && (
+          <TutorialModal onClose={() => setShowTutorial(false)} />
+        )}
         <Spacer />
         <Heading
           size={{ base: "3xl", sm: "3xl", md: "4xl", lg: "4xl" }}
@@ -67,6 +73,7 @@ export const Menu = ({
             transition:
               "font-size 0.3s ease-in-out, transform 0.3s ease-in-out",
           }}
+          onClick={() => setShowTutorial(true)}
         >
           HOW TO PLAY
         </Heading>
