@@ -17,11 +17,13 @@ export const HeroPool = ({
   numCols,
   type,
   setCharacterGuess,
+  isDisabled,
 }: {
   selected: string;
   numCols: number;
   type: string;
   setCharacterGuess: any;
+  isDisabled: boolean;
 }) => {
   const characters = type === "support" ? support : type === "dps" ? dps : tank;
   const typeIcon =
@@ -72,6 +74,7 @@ export const HeroPool = ({
                   minWidth={{ lg: 50, sm: 38, base: 8 }}
                   transform={isSelected ? "scale(1.2)" : ""}
                   zIndex={isSelected ? 1 : 0}
+                  isDisabled={isDisabled}
                   onClick={() => {
                     isSelected
                       ? setCharacterGuess("")

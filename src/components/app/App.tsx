@@ -17,8 +17,10 @@ import { useState } from "react";
 import { DailyWord } from "../util/interfaces";
 import { ScoreModal } from "../modals/Score";
 import { EndlessModal } from "../modals/Endless";
+import { TutorialModal } from "../modals/Tutorial";
 
 const ModalStates = {
+  TUTORIAL: "tutorial",
   SHOW_SCORE: "showScore",
   GAME_OVER: "gameOver",
 };
@@ -30,7 +32,7 @@ export const App = ({
   data: DailyWord[];
   endless: boolean;
 }) => {
-  const [modalActive, setModalActive] = useState<any>(undefined);
+  const [modalActive, setModalActive] = useState<any>(ModalStates.TUTORIAL);
   const [score, setScore] = useState(0);
   const [scores, setScores] = useState<number[]>([]);
   const [selectedCharcter, setCharacter] = useState("");
@@ -70,7 +72,6 @@ export const App = ({
         )
       );
     }
-
     return icons;
   };
 
@@ -157,10 +158,12 @@ export const App = ({
           }}
         />
       )}
-
-      <Heading style={styles.font}>STAGE {turn + 1}</Heading>
+      {modalActive === ModalStates.TUTORIAL && (
+        <TutorialModal onClose={() => setModalActive(undefined)} />
+      )}
       {endless ? (
         <>
+          <Heading style={styles.font}>STAGE {turn + 1}</Heading>
           <Flex>{getStrikeIcons()}</Flex>
           <Image loading="lazy" width={"20vw"} src={endlessData.img} />
         </>
@@ -168,6 +171,8 @@ export const App = ({
         <>
           {turn === 3 && (
             <>
+              <Heading style={styles.font}>GAME OVER</Heading>
+              <Heading style={styles.font}>SCORE: {score}</Heading>
               <Flex flexDirection={"row"} gap={4}>
                 {data.map((turn, index) => (
                   <Flex flexDirection={"column"} alignItems={"center"}>
@@ -183,6 +188,7 @@ export const App = ({
 
           {turn < 3 && (
             <>
+              <Heading style={styles.font}>STAGE {turn + 1}</Heading>
               {data.length > 0 ? (
                 <Image loading="lazy" width={"20vw"} src={data[turn].img} />
               ) : (
@@ -195,7 +201,7 @@ export const App = ({
       <Spacer />
       {easyMode ? (
         <Select
-          disabled={selectedCharcter === ""}
+          disabled={selectedCharcter === "" || (turn === 3 && !endless)}
           maxWidth={"50vw"}
           value={ability}
           onChange={handleChange}
@@ -214,6 +220,7 @@ export const App = ({
         </Select>
       ) : (
         <Input
+          isDisabled={turn === 3 && !endless}
           maxWidth={"50vw"}
           value={ability}
           onChange={handleChange}
@@ -230,6 +237,7 @@ export const App = ({
         flexGrow={1}
       >
         <HeroSelect
+          isDisabled={turn === 3 && !endless}
           selected={selectedCharcter}
           setCharacterGuess={setCharacterGuess}
         />
