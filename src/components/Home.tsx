@@ -7,6 +7,7 @@ import { Menu } from "./menu/Menu";
 import axios from "axios";
 import { loadSlim } from "@tsparticles/slim";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { DateTime } from "luxon";
 
 const Home = () => {
   const [data, setData] = useState<DailyWord[]>([]);
@@ -24,7 +25,8 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://overwatchle-api.fly.dev/daily"
+          "https://overwatchle-api.fly.dev/daily",
+          { params: { date: DateTime.now().toFormat("dd/MM/yyyy") } }
         );
         const resp = JSON.parse(atob(atob(atob(response.data))));
         setData(resp);
