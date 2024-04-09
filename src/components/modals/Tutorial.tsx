@@ -27,6 +27,8 @@ export const TutorialModal = ({ onClose }: { onClose: () => void }) => {
         return "YOU WILL GAIN POINTS FOR SELECTING THE CORRECT HERO AND ABILITY.";
       case 4:
         return "IF YOU ARE PLAYING ENDLESS YOU WILL LOSE LIVES FOR SELECTING THE INCORRECT HERO AND ABILITY.";
+      case 5:
+        return "THAT'S IT! HAVE FUN PLAYING!";
       default:
         return "THAT'S IT! HAVE FUN PLAYING!";
     }
@@ -52,9 +54,11 @@ export const TutorialModal = ({ onClose }: { onClose: () => void }) => {
             </Text>
           </ModalBody>
           <ModalFooter>
-            <Button bg={"#f99e1a"} color={"white"} mr={3} onClick={onClose}>
-              <Text style={styles.font}>CLOSE</Text>
-            </Button>
+            {page < 5 && (
+              <Button bg={"#f99e1a"} color={"white"} mr={3} onClick={onClose}>
+                <Text style={styles.font}>CLOSE</Text>
+              </Button>
+            )}
             {page > 0 && (
               <Button
                 bg={"#f99e1a"}
@@ -65,14 +69,20 @@ export const TutorialModal = ({ onClose }: { onClose: () => void }) => {
                 <Text style={styles.font}>PREV</Text>
               </Button>
             )}
-            <Button
-              bg={"#f99e1a"}
-              color={"white"}
-              mr={3}
-              onClick={() => setPage(page + 1)}
-            >
-              <Text style={styles.font}>NEXT</Text>
-            </Button>
+            {page === 5 ? (
+              <Button bg={"#f99e1a"} color={"white"} mr={3} onClick={onClose}>
+                <Text style={styles.font}>CLOSE</Text>
+              </Button>
+            ) : (
+              <Button
+                bg={"#f99e1a"}
+                color={"white"}
+                mr={3}
+                onClick={() => setPage(page + 1)}
+              >
+                <Text style={styles.font}>NEXT</Text>
+              </Button>
+            )}
           </ModalFooter>
         </ModalContent>
       </Modal>

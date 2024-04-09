@@ -27,10 +27,10 @@ export const Settings = ({
   toggleEasyMode: () => void;
 }) => {
   return (
-    <Drawer isOpen={true} placement="left" size={"lg"} onClose={onClose}>
+    <Drawer isOpen={true} placement="left" size={"xs"} onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent bgColor={"#43484c"}>
-        <DrawerCloseButton />
+        <DrawerCloseButton size={"lg"} color={"#f06414"} />
         <DrawerHeader
           as={"em"}
           fontSize={40}
@@ -40,10 +40,10 @@ export const Settings = ({
         >
           SETTINGS
         </DrawerHeader>
-
         <DrawerBody>
           <Flex
             width={"100%"}
+            height={"100%"}
             flexDirection={"column"}
             gap={4}
             justifyContent={"center"}
@@ -53,7 +53,7 @@ export const Settings = ({
               <CardBody p={1}>
                 <Image
                   src={
-                    "https://th.bing.com/th/id/OIG2.zYj6BYTMhJfHxsXuY3pw?pid=ImgGn"
+                    "https://th.bing.com/th/id/OIG3.h98jBeAgVndtHVswq2XN?pid=ImgGn"
                   }
                   alt="alt"
                   height={"20vh"}
@@ -63,7 +63,7 @@ export const Settings = ({
                   colorScheme={"orange"}
                   width={"100%"}
                   borderRadius={0}
-                  fontSize={{ base: "xs", sm: "sm", md: "xl", lg: "2xl" }}
+                  fontSize={{ base: "xs", sm: "xs", md: "xl", lg: "2xl" }}
                 >
                   {"MAIN MENU"}
                 </Button>
@@ -85,7 +85,7 @@ export const Settings = ({
                   width={"100%"}
                   style={styles.font}
                   borderRadius={0}
-                  fontSize={{ base: "xs", sm: "sm", md: "xl", lg: "2xl" }}
+                  fontSize={{ base: "xs", sm: "xs", md: "xl", lg: "2xl" }}
                 >
                   {easyMode ? "EASY MODE" : "HARD MODE"}
                 </Button>
@@ -111,7 +111,7 @@ export const Settings = ({
                   colorScheme={"orange"}
                   width={"100%"}
                   borderRadius={0}
-                  fontSize={{ base: "xs", sm: "sm", md: "xl", lg: "2xl" }}
+                  fontSize={{ base: "xs", sm: "xs", md: "xl", lg: "2xl" }}
                 >
                   {"HOW TO PLAY"}
                 </Button>

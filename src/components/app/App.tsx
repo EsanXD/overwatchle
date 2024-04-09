@@ -41,7 +41,7 @@ export const App = ({
   const [ability, setAbility] = useState("");
   const [turn, setTurn] = useState(0);
   const [guesses, setGuesses] = useState<string[]>([]);
-  const [easyMode, setEasyMode] = useState(false);
+  const [easyMode, setEasyMode] = useState(true);
   const [endlessData, setEndlessData] = useState<DailyWord>(
     abilities[Math.floor((Math.random() * 100000) % abilities.length)]
   );
@@ -143,6 +143,7 @@ export const App = ({
       justify="space-between"
       gap={2}
       width={"100vw"}
+      overflow={"hidden"}
     >
       <Flex justifyContent={"center"} alignItems={"center"}>
         <IconButton
@@ -166,7 +167,7 @@ export const App = ({
           <Heading as="em" style={styles.font}>
             SCORE: {score}
           </Heading>
-          {endless && <Flex>{getStrikeIcons()}</Flex>}
+          {endless && <Heading>{getStrikeIcons()}</Heading>}
         </Flex>
       </Flex>
       {(endless || (!endless && turn < 3 && data.length > 0)) && (
@@ -198,36 +199,44 @@ export const App = ({
           ))}
         </Flex>
       )}
-
-      {easyMode ? (
-        <Select
-          disabled={selectedCharcter === "" || (turn === 3 && !endless)}
-          maxWidth={"50vw"}
-          value={ability}
-          onChange={handleChange}
-          style={styles.font}
-          bg={"rgb(229, 235, 244)"}
+      <Flex alignItems={"center"} gap={8} width={"85vw"}>
+        {easyMode ? (
+          <Select
+            disabled={selectedCharcter === "" || (turn === 3 && !endless)}
+            value={ability}
+            onChange={handleChange}
+            style={styles.font}
+            bg={"rgb(229, 235, 244)"}
+          >
+            {availableAbilities.map((hero) => (
+              <option value={hero.ability}>{hero.ability.toUpperCase()}</option>
+            ))}
+          </Select>
+        ) : (
+          <Input
+            isDisabled={turn === 3 && !endless}
+            value={ability}
+            onChange={handleChange}
+            style={styles.font}
+            placeholder="GUESS THE ABILITY"
+          />
+        )}
+        <Button
+          style={{ ...styles.primary, ...styles.font }}
+          size={{ base: "sm", sm: "md", md: "lg", lg: "lg" }}
+          onClick={endless ? handleSubmitEndless : handleSubmit}
         >
-          {availableAbilities.map((hero) => (
-            <option value={hero.ability}>{hero.ability.toUpperCase()}</option>
-          ))}
-        </Select>
-      ) : (
-        <Input
-          isDisabled={turn === 3 && !endless}
-          maxWidth={"50vw"}
-          value={ability}
-          onChange={handleChange}
-          style={styles.font}
-          placeholder="GUESS THE ABILITY"
-        />
-      )}
+          GUESS
+        </Button>
+      </Flex>
+
       <Flex
         direction={"row"}
         wrap={"wrap"}
         gap={50}
         justifyContent={"center"}
         alignItems={"center"}
+        pb={8}
       >
         <HeroSelect
           isDisabled={turn === 3 && !endless}
@@ -237,14 +246,6 @@ export const App = ({
           }}
         />
       </Flex>
-      <Button
-        style={{ ...styles.primary, ...styles.font }}
-        size={{ base: "sm", sm: "md", md: "lg", lg: "lg" }}
-        my={4}
-        onClick={endless ? handleSubmitEndless : handleSubmit}
-      >
-        SUBMIT GUESS
-      </Button>
 
       {modalActive === ModalStates.SHOW_SCORE && (
         <ScoreModal
