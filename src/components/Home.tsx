@@ -44,6 +44,7 @@ const Home = () => {
       flexDirection={"column"}
       alignItems={"center"}
       background={"#43484c"}
+      overflow={"hidden"}
     >
       <Header />
       {showMenu ? (
