@@ -17,6 +17,7 @@ import { ScoreModal } from "../modals/Score";
 import { EndlessModal } from "../modals/Endless";
 import { TutorialModal } from "../modals/Tutorial";
 import { Settings } from "../menu/Settings";
+import { DateTime } from "luxon";
 
 const ModalStates = {
   TUTORIAL: "tutorial",
@@ -133,6 +134,32 @@ export const App = ({
       setModalActive(ModalStates.SHOW_SCORE);
     }
   };
+
+  useEffect(() => {
+    //on startup load data.
+    const today = DateTime.now().toFormat("dd/MM/yyyy");
+    // { score: num, turn: num}
+    const savedData = localStorage.getItem(today);
+    if (savedData && !endless) {
+      const { oldScore, oldTurn, gameOver } = JSON.parse(savedData);
+      setScore(oldScore);
+      setTurn(oldTurn);
+      setGameOver(gameOver);
+    }
+  }, []);
+
+  useEffect(() => {
+    //on startup load data.
+    const today = DateTime.now().toFormat("dd/MM/yyyy");
+    // { score: num, turn: num}
+    if (turn !== 0 && !endless) {
+      localStorage.setItem(
+        today,
+        JSON.stringify({ oldScore: score, oldTurn: turn, gameOver: gameOver })
+      );
+      console.log("saving", score, turn);
+    }
+  }, [turn, score]);
 
   return (
     <Flex
