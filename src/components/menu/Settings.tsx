@@ -14,17 +14,13 @@ import {
 import { styles } from "../util/consts";
 
 export const Settings = ({
-  easyMode,
   onClose,
   openMenu,
   openTutorial,
-  toggleEasyMode,
 }: {
-  easyMode: boolean;
   onClose: () => void;
   openMenu: () => void;
   openTutorial: () => void;
-  toggleEasyMode: () => void;
 }) => {
   return (
     <Drawer isOpen={true} placement="left" size={"xs"} onClose={onClose}>
@@ -69,28 +65,7 @@ export const Settings = ({
                 </Button>
               </CardBody>
             </Card>
-            <Card maxW="sm" onClick={toggleEasyMode}>
-              <CardBody p={1}>
-                <Image
-                  src={
-                    easyMode
-                      ? "https://th.bing.com/th/id/OIG2.WN6Zax33K7zE5SlbMgpM?pid=ImgGn"
-                      : "https://th.bing.com/th/id/OIG2.LMMJuEtWjNBYeQT0Akye?pid=ImgGn"
-                  }
-                  alt="alt"
-                  height={"20vh"}
-                />
-                <Button
-                  colorScheme={easyMode ? "blue" : "red"}
-                  width={"100%"}
-                  style={styles.font}
-                  borderRadius={0}
-                  fontSize={{ base: "xs", sm: "xs", md: "xs", lg: "md" }}
-                >
-                  {easyMode ? "EASY MODE" : "HARD MODE"}
-                </Button>
-              </CardBody>
-            </Card>
+
             <Card
               maxW="sm"
               onClick={() => {
