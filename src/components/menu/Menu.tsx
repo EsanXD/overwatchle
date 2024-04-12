@@ -1,4 +1,4 @@
-import { Flex, Heading, Spacer } from "@chakra-ui/react";
+import { Box, Flex, Heading, Spacer } from "@chakra-ui/react";
 import { styles } from "../util/consts";
 import { TutorialModal } from "../modals/Tutorial";
 import { useState } from "react";
@@ -25,36 +25,39 @@ export const Menu = ({
           <TutorialModal onClose={() => setShowTutorial(false)} />
         )}
         <Spacer />
-        <Heading
-          size={{ base: "3xl", sm: "3xl", md: "4xl", lg: "4xl" }}
-          style={styles.font}
-          color={"#f06414"}
-          as="em"
+        <Box
           _hover={{
-            fontSize: "2.5xl",
-            transform: "scale(1.25) translate(50px)",
-            cursor: "pointer",
-            transition:
-              "font-size 0.3s ease-in-out, transform 0.3s ease-in-out",
-          }}
-          onClick={() => {
-            setEndless(false);
-            showMenu(false);
+            backgroundColor: "red",
+            animation: "fireAnimation 2s linear infinite",
           }}
         >
-          PLAY DAILY
-        </Heading>
+          <Heading
+            size={{ base: "3xl", sm: "3xl", md: "4xl", lg: "4xl" }}
+            style={styles.font}
+            color={"#f06414"}
+            as="em"
+            _hover={{
+              transform: "scale(1.25) translate(50px)",
+            }}
+            cursor="pointer"
+            transition={"transform 0.3s linear"}
+            onClick={() => {
+              setEndless(false);
+              showMenu(false);
+            }}
+          >
+            PLAY DAILY
+          </Heading>
+        </Box>
         <Heading
           size={{ base: "2xl", sm: "2xl", md: "4xl", lg: "4xl" }}
           style={styles.font}
           as="em"
           _hover={{
-            fontSize: "2.5xl",
             transform: "scale(1.25) translate(50px)",
-            cursor: "pointer",
-            transition:
-              "font-size 0.3s ease-in-out, transform 0.3s ease-in-out",
           }}
+          cursor="pointer"
+          transition={"transform 0.3s linear"}
           onClick={() => {
             setEndless(true);
             showMenu(false);
@@ -67,12 +70,10 @@ export const Menu = ({
           style={styles.font}
           as="em"
           _hover={{
-            fontSize: "2.5xl",
             transform: "scale(1.25) translate(50px)",
-            cursor: "pointer",
-            transition:
-              "font-size 0.3s ease-in-out, transform 0.3s ease-in-out",
           }}
+          cursor="pointer"
+          transition={"transform 0.3s linear"}
           onClick={() => setShowTutorial(true)}
         >
           HOW TO PLAY

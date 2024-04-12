@@ -22,6 +22,7 @@ export const HeroSelect = ({
       alignItems={"center"}
       flexGrow={1}
       px={4}
+      py={8}
     >
       <HeroPool
         isDisabled={isDisabled}

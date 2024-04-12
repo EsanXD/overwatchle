@@ -1,7 +1,6 @@
 import {
-  Box,
   Flex,
-  Heading,
+  Text,
   IconButton,
   Image,
   Popover,
@@ -11,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { tank, dps, support } from "../util/characters";
 import { styles } from "../util/consts";
+import { motion } from "framer-motion";
 
 export const HeroPool = ({
   selected,
@@ -34,6 +34,23 @@ export const HeroPool = ({
       : type === "dps"
       ? "/Circle_Damage.svg"
       : "/Circle_Tank.svg";
+
+  const iconButtonVariants = {
+    selected: {
+      scale: 1.4,
+      transition: {
+        type: "spring",
+        stiffness: 50,
+        damping: 3,
+      },
+    },
+    notSelected: {
+      scale: 1,
+      transition: {
+        type: "easeOut",
+      },
+    },
+  };
 
   return (
     <Flex
@@ -67,13 +84,15 @@ export const HeroPool = ({
             <Popover isOpen={isSelected} placement="bottom">
               <PopoverTrigger>
                 <IconButton
+                  as={motion.button}
                   aria-label="Select Character"
                   key={character.name}
                   bgColor={isSelected ? "#f06414" : "gray"}
                   height={{ lg: 50, sm: 38, base: 8 }}
                   maxWidth={{ lg: 50, sm: 38, base: 8 }}
                   minWidth={{ lg: 50, sm: 38, base: 8 }}
-                  transform={isSelected ? "scale(1.2)" : ""}
+                  variants={iconButtonVariants}
+                  animate={isSelected ? "selected" : "notSelected"}
                   zIndex={isSelected ? 1 : 0}
                   isDisabled={isDisabled}
                   onClick={() => {
@@ -92,7 +111,6 @@ export const HeroPool = ({
                         : ""
                     }
                     border={isSelected ? "2px solid #ffff32" : ""}
-                    transform={isSelected ? "scale(1.2)" : ""}
                     borderRadius={"md"}
                     loading="lazy"
                     src={character.img}
@@ -100,16 +118,22 @@ export const HeroPool = ({
                   />
                 </IconButton>
               </PopoverTrigger>
-              <PopoverContent width={"auto"} display={"flex"} flexShrink={1}>
+              <PopoverContent
+                width={"auto"}
+                display={"flex"}
+                flexShrink={1}
+                position={"relative"}
+                bottom={2}
+              >
                 <PopoverBody>
-                  <Heading
+                  <Text
                     as="em"
                     size={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
                     style={styles.font}
                     color={"#f06414"}
                   >
                     {character.name}
-                  </Heading>
+                  </Text>
                 </PopoverBody>
               </PopoverContent>
             </Popover>

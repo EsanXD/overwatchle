@@ -7,6 +7,7 @@ import {
   Text,
   Select,
   IconButton,
+  Box,
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { abilities, styles } from "../util/consts";
@@ -78,13 +79,7 @@ export const App = ({
   const getStrikeIcons = () => {
     let icons = [];
     for (let i = 0; i < 5; i++) {
-      icons.push(
-        i < strikes ? (
-          <CloseIcon color={"red"} />
-        ) : (
-          <CloseIcon color={"green"} />
-        )
-      );
+      icons.push(<CloseIcon color={i < strikes ? "red" : "#218ffe"} />);
     }
     return icons;
   };
@@ -183,26 +178,42 @@ export const App = ({
         />
         <Flex flexDirection={"column"} alignItems={"center"}>
           {gameOver ? (
-            <Heading as="em" style={styles.font}>
+            <Heading as="em" style={styles.font} colorScheme="red">
               GAME OVER
             </Heading>
           ) : (
-            <Heading as="em" style={styles.font}>
+            <Heading as="em" style={styles.font} color={"#43484c"}>
               STAGE {turn + 1}
             </Heading>
           )}
-          <Heading as="em" style={styles.font}>
-            SCORE: {score}
-          </Heading>
-          {endless && <Heading>{getStrikeIcons()}</Heading>}
+          {endless ? (
+            <Heading>{getStrikeIcons()}</Heading>
+          ) : (
+            <Heading as="em" style={styles.font} color={"#43484c"}>
+              SCORE: {score}
+            </Heading>
+          )}
         </Flex>
       </Flex>
       {(endless || (!endless && turn < 3 && data.length > 0)) && (
-        <Image
-          loading="lazy"
-          width={"30vh"}
-          src={endless ? endlessData.img : data[turn].img}
-        />
+        <Flex
+          bgColor={"#43484c"}
+          borderRadius={"100%"}
+          height={192}
+          width={192}
+          alignItems={"center"}
+          justifyContent={"center"}
+          border={"4px solid white"}
+          zIndex={50}
+        >
+          <Image
+            zIndex={50}
+            loading="lazy"
+            maxHeight={128}
+            maxWidth={128}
+            src={endless ? endlessData.img : data[turn].img}
+          />
+        </Flex>
       )}
       {gameOver && !endless && (
         <Flex
@@ -234,6 +245,7 @@ export const App = ({
             onChange={handleChange}
             style={styles.font}
             bg={"rgb(229, 235, 244)"}
+            zIndex={50}
           >
             {availableAbilities.map((hero) => (
               <option value={hero.ability}>{hero.ability.toUpperCase()}</option>
@@ -246,6 +258,8 @@ export const App = ({
             onChange={handleChange}
             style={styles.font}
             placeholder="GUESS THE ABILITY"
+            bgColor={"white"}
+            zIndex={50}
           />
         )}
         <Button

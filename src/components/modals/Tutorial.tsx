@@ -1,5 +1,6 @@
 import {
   Modal,
+  Box,
   ModalOverlay,
   ModalContent,
   ModalHeader,
@@ -49,9 +50,11 @@ export const TutorialModal = ({ onClose }: { onClose: () => void }) => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text as={"em"} fontSize={20} color={"white"} style={styles.font}>
-              {getPage()}
-            </Text>
+            <Box height={100}>
+              <Text as={"em"} fontSize={20} color={"white"} style={styles.font}>
+                {getPage()}
+              </Text>
+            </Box>
           </ModalBody>
           <ModalFooter>
             {page < 5 && (

@@ -63,7 +63,7 @@ export const Settings = ({
                   colorScheme={"orange"}
                   width={"100%"}
                   borderRadius={0}
-                  fontSize={{ base: "xs", sm: "xs", md: "xl", lg: "xl" }}
+                  fontSize={{ base: "xs", sm: "xs", md: "xs", lg: "md" }}
                 >
                   {"MAIN MENU"}
                 </Button>
@@ -85,7 +85,7 @@ export const Settings = ({
                   width={"100%"}
                   style={styles.font}
                   borderRadius={0}
-                  fontSize={{ base: "xs", sm: "xs", md: "xl", lg: "xl" }}
+                  fontSize={{ base: "xs", sm: "xs", md: "xs", lg: "md" }}
                 >
                   {easyMode ? "EASY MODE" : "HARD MODE"}
                 </Button>
@@ -111,7 +111,7 @@ export const Settings = ({
                   colorScheme={"orange"}
                   width={"100%"}
                   borderRadius={0}
-                  fontSize={{ base: "xs", sm: "xs", md: "xl", lg: "xl" }}
+                  fontSize={{ base: "xs", sm: "xs", md: "xs", lg: "md" }}
                 >
                   {"HOW TO PLAY"}
                 </Button>
