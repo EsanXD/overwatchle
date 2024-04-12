@@ -11,14 +11,15 @@ import {
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { abilities, styles } from "../util/consts";
-import { HeroSelect } from "./HeroSelect";
+import { HeroSelect } from "../heroSelect/HeroSelect";
 import { useEffect, useState } from "react";
-import { DailyWord } from "../util/interfaces";
+import { Character, DailyWord } from "../util/interfaces";
 import { ScoreModal } from "../modals/Score";
 import { EndlessModal } from "../modals/Endless";
 import { TutorialModal } from "../modals/Tutorial";
 import { Settings } from "../menu/Settings";
 import { DateTime } from "luxon";
+import { Scoreboard } from "../scoreboard.tsx/Scoreboard";
 
 const ModalStates = {
   TUTORIAL: "tutorial",
@@ -43,6 +44,50 @@ export const App = ({
     return text.replace(/[^a-zA-Z]/g, "").toLowerCase();
   };
 
+  const dummy: Character = {
+    name: "D.VA",
+    gender: "female",
+    role: "tank",
+    race: "human",
+    org: "overwatch",
+    projectileType: "hitscan",
+    releaseYear: 2016,
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/ca114f72193e4d58a85c087e9409242f1a31e808cf4058678b8cbf767c2a9a0a.png",
+  };
+
+  const guesses: Character[] = [
+    {
+      name: "DOOMFIST",
+      gender: "male",
+      role: "tank",
+      race: "human",
+      org: "talon",
+      projectileType: "projectile",
+      releaseYear: 2017,
+      img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/13750471c693c1a360eb19d5ace229c8599a729cd961d72ebee0e157657b7d18.png",
+    },
+    {
+      name: "JUNKER QUEEN",
+      gender: "female",
+      role: "tank",
+      race: "human",
+      org: "junker",
+      projectileType: "hitscan",
+      releaseYear: 2022,
+      img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/cef2406b2244b80506f83b8fb9ebaf214f41fa8795cbeef84026cd8018561d04.png",
+    },
+    {
+      name: "ORISA",
+      gender: "female",
+      role: "tank",
+      race: "omnic",
+      org: "overwatch",
+      projectileType: "projectile",
+      releaseYear: 2017,
+      img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/71e96294617e81051d120b5d04b491bb1ea40e2933da44d6631aae149aac411d.png",
+    },
+  ];
+
   return (
     <Flex
       bg={"rgba(229, 235, 244, .8)"}
@@ -64,6 +109,8 @@ export const App = ({
           icon={<HamburgerIcon />}
         />
       </Flex>
+
+      <Scoreboard guesses={guesses} actual={dummy} />
 
       <Flex
         direction={"row"}
