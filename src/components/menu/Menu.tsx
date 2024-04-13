@@ -25,30 +25,23 @@ export const Menu = ({
           <TutorialModal onClose={() => setShowTutorial(false)} />
         )}
         <Spacer />
-        <Box
+        <Heading
+          size={{ base: "3xl", sm: "3xl", md: "4xl", lg: "4xl" }}
+          style={styles.font}
+          color={"#f06414"}
+          as="em"
           _hover={{
-            backgroundColor: "red",
-            animation: "fireAnimation 2s linear infinite",
+            transform: "scale(1.25) translate(50px)",
+          }}
+          cursor="pointer"
+          transition={"transform 0.3s linear"}
+          onClick={() => {
+            setEndless(false);
+            showMenu(false);
           }}
         >
-          <Heading
-            size={{ base: "3xl", sm: "3xl", md: "4xl", lg: "4xl" }}
-            style={styles.font}
-            color={"#f06414"}
-            as="em"
-            _hover={{
-              transform: "scale(1.25) translate(50px)",
-            }}
-            cursor="pointer"
-            transition={"transform 0.3s linear"}
-            onClick={() => {
-              setEndless(false);
-              showMenu(false);
-            }}
-          >
-            PLAY DAILY
-          </Heading>
-        </Box>
+          PLAY DAILY
+        </Heading>
         <Heading
           size={{ base: "2xl", sm: "2xl", md: "4xl", lg: "4xl" }}
           style={styles.font}

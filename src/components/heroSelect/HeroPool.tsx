@@ -57,7 +57,8 @@ export const HeroPool = ({
       gap={isLargeSize ? 4 : 1}
       alignItems={"center"}
       justifyContent={"center"}
-      height={{ lg: 110, sm: 24, base: 16 }}
+      height={{ lg: 110, base: 16 }}
+      marginBottom={{ lg: 12, base: 12 }}
     >
       {isLargeSize && (
         <Image height={50} src={process.env.PUBLIC_URL + typeIcon} />
@@ -66,15 +67,13 @@ export const HeroPool = ({
         direction={"row"}
         maxWidth={{
           lg: 55 * numCols,
-          sm: 44 * numCols,
-          base: 32 * numCols,
+          base: 42 * numCols,
         }}
         minWidth={{
           lg: 55 * numCols,
-          sm: 44 * numCols,
-          base: 32 * numCols,
+          base: 42 * numCols,
         }}
-        gap={{ base: 0, sm: 0, md: 0, lg: 1 }}
+        gap={{ base: 1, lg: 1 }}
         wrap={"wrap"}
         justifyContent={"center"}
       >
@@ -88,9 +87,9 @@ export const HeroPool = ({
                   aria-label="Select Character"
                   key={character.name}
                   bgColor={isSelected ? "#f06414" : "gray"}
-                  height={{ lg: 50, sm: 38, base: 8 }}
-                  maxWidth={{ lg: 50, sm: 38, base: 8 }}
-                  minWidth={{ lg: 50, sm: 38, base: 8 }}
+                  height={{ lg: 50, sm: 38, base: 38 }}
+                  maxWidth={{ lg: 50, sm: 38, base: 38 }}
+                  minWidth={{ lg: 50, sm: 38, base: 38 }}
                   variants={iconButtonVariants}
                   animate={isSelected ? "selected" : "notSelected"}
                   zIndex={isSelected ? 1 : 0}
@@ -102,8 +101,8 @@ export const HeroPool = ({
                   }}
                 >
                   <Image
-                    height={{ lg: 50, sm: 38, base: 8 }}
-                    width={{ lg: 50, sm: 38, base: 8 }}
+                    height={{ lg: 50, base: 38 }}
+                    width={{ lg: 50, base: 38 }}
                     borderY={"2px solid #fff"}
                     backgroundImage={
                       isSelected
@@ -128,7 +127,7 @@ export const HeroPool = ({
                 <PopoverBody>
                   <Text
                     as="em"
-                    size={{ base: "xs", sm: "sm", md: "md", lg: "lg" }}
+                    size={{ base: "xs", lg: "lg" }}
                     style={styles.font}
                     color={"#f06414"}
                   >
