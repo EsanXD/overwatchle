@@ -86,6 +86,16 @@ export const App = ({
       releaseYear: 2017,
       img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/71e96294617e81051d120b5d04b491bb1ea40e2933da44d6631aae149aac411d.png",
     },
+    {
+      name: "ECHO",
+      gender: "female",
+      role: "dps",
+      race: "omnic",
+      org: "overwatch",
+      projectileType: "projectile/beam",
+      releaseYear: 2020,
+      img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/f086bf235cc6b7f138609594218a8385c8e5f6405a39eceb0deb9afb429619fe.png",
+    },
   ];
 
   return (

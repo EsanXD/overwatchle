@@ -306,7 +306,7 @@ export const Characters = [
   },
   {
     name: "CASSIDY",
-    gender: "female",
+    gender: "male",
     role: "dps",
     race: "human",
     org: "deadlock rebels/overwatch",
