@@ -13,7 +13,6 @@ import {
   Image,
   Flex,
   Divider,
-  Box,
 } from "@chakra-ui/react";
 
 export const Scoreboard = ({
@@ -31,7 +30,7 @@ export const Scoreboard = ({
   };
 
   return (
-    <Flex flexDirection={"column"} alignItems={"center"}>
+    <Flex flexDirection={"column"} alignItems={"center"} zIndex={1}>
       <TableContainer borderRadius={8}>
         <Table
           align="center"
