@@ -23,6 +23,7 @@ export const Scoreboard = ({
   guesses: Character[];
   actual: Character;
 }) => {
+  const headers = ["", "", "GENDER", "RACE", "ORG", "PROJECTILE", "RELEASE"];
   const roleIcon = {
     tank: "/Circle_Tank.svg",
     dps: "/Circle_Damage.svg",
@@ -40,25 +41,11 @@ export const Scoreboard = ({
         >
           <Thead bgColor={"white"}>
             <Tr>
-              <Th textAlign={"center"} sx={styles.font}></Th>
-              <Th textAlign={"center"} sx={styles.font}>
-                Character
-              </Th>
-              <Th textAlign={"center"} sx={styles.font}>
-                Gender
-              </Th>
-              <Th textAlign={"center"} sx={styles.font}>
-                Race
-              </Th>
-              <Th textAlign={"center"} sx={styles.font}>
-                Org
-              </Th>
-              <Th textAlign={"center"} sx={styles.font}>
-                Projectile Type
-              </Th>
-              <Th textAlign={"center"} sx={styles.font}>
-                Release
-              </Th>
+              {headers.map((header) => (
+                <Th textAlign={"center"} sx={styles.font}>
+                  {header}
+                </Th>
+              ))}
             </Tr>
           </Thead>
           <Tbody>
@@ -71,14 +58,19 @@ export const Scoreboard = ({
               const projectileType =
                 guess.projectileType === actual.projectileType;
               const releaseYear = guess.releaseYear === actual.releaseYear;
-              const numCorrect =
-                (role ? 1 : 0) +
-                (gender ? 1 : 0) +
-                (org ? 1 : 0) +
-                (race ? 1 : 0) +
-                (projectileType ? 1 : 0) +
-                (releaseYear ? 1 : 0);
-              const percentCorrect = Math.ceil((numCorrect / 6) * 100);
+              const fieldGuesses: boolean[] = [
+                isCorrect,
+                role,
+                gender,
+                org,
+                race,
+                projectileType,
+                releaseYear,
+              ];
+              const numCorrect = fieldGuesses.filter((f) => f).length;
+              const percentCorrect = Math.ceil(
+                (numCorrect / fieldGuesses.length) * 100
+              );
               const red = "#E82D4F";
               const green = "#01BA01";
 
@@ -153,10 +145,10 @@ export const Scoreboard = ({
                         <Flex justifyContent={"center"} alignItems={"center"}>
                           <span className="material-symbols-outlined">
                             {guess.gender === "male"
-                              ? "man"
+                              ? "male"
                               : guess.gender === "female"
-                              ? "woman"
-                              : "robot"}
+                              ? "female"
+                              : "agender"}
                           </span>
                         </Flex>
                       </Flex>
@@ -170,7 +162,7 @@ export const Scoreboard = ({
                         justifyContent={"center"}
                         alignItems={"center"}
                       >
-                        {guess.race}
+                        {guess.race.toUpperCase()}
                       </Flex>
                     </Td>
 
@@ -182,7 +174,7 @@ export const Scoreboard = ({
                         justifyContent={"center"}
                         alignItems={"center"}
                       >
-                        {guess.org}
+                        {guess.org.toUpperCase()}
                       </Flex>
                     </Td>
 
@@ -194,7 +186,7 @@ export const Scoreboard = ({
                         justifyContent={"center"}
                         alignItems={"center"}
                       >
-                        {guess.projectileType}
+                        {guess.projectileType.toUpperCase()}
                       </Flex>
                     </Td>
 
