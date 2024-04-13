@@ -23,15 +23,7 @@ export const Scoreboard = ({
   guesses: Character[];
   actual: Character;
 }) => {
-  const headers = [
-    "",
-    "",
-    "GENDER",
-    "RACE",
-    "ORG",
-    "PROJECTILE",
-    "RELEASE",
-  ];
+  const headers = ["", "", "GENDER", "RACE", "ORG", "PROJECTILE", "RELEASE"];
   const roleIcon = {
     tank: "/Circle_Tank.svg",
     dps: "/Circle_Damage.svg",
@@ -153,10 +145,10 @@ export const Scoreboard = ({
                         <Flex justifyContent={"center"} alignItems={"center"}>
                           <span className="material-symbols-outlined">
                             {guess.gender === "male"
-                              ? "man"
+                              ? "male"
                               : guess.gender === "female"
-                              ? "woman"
-                              : "robot"}
+                              ? "female"
+                              : "agender"}
                           </span>
                         </Flex>
                       </Flex>
@@ -170,7 +162,7 @@ export const Scoreboard = ({
                         justifyContent={"center"}
                         alignItems={"center"}
                       >
-                        {guess.race}
+                        {guess.race.toUpperCase()}
                       </Flex>
                     </Td>
 
@@ -182,7 +174,7 @@ export const Scoreboard = ({
                         justifyContent={"center"}
                         alignItems={"center"}
                       >
-                        {guess.org}
+                        {guess.org.toUpperCase()}
                       </Flex>
                     </Td>
 
@@ -194,7 +186,7 @@ export const Scoreboard = ({
                         justifyContent={"center"}
                         alignItems={"center"}
                       >
-                        {guess.projectileType}
+                        {guess.projectileType.toUpperCase()}
                       </Flex>
                     </Td>
 
