@@ -9,7 +9,7 @@ export interface DailyWord {
 
 export interface Character {
   name: string;
-  gender: "male" | "female";
+  gender: "male" | "female" | "n/a";
   role: "tank" | "dps" | "support";
   race: string;
   org: string;
