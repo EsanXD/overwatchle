@@ -6,3 +6,14 @@ export interface DailyWord {
   ability: string;
   img: string;
 }
+
+export interface Character {
+  name: string;
+  gender: "male" | "female";
+  role: "tank" | "dps" | "support";
+  race: string;
+  org: string;
+  projectileType: string;
+  releaseYear: number;
+  img: string;
+}
