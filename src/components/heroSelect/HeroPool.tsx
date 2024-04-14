@@ -11,6 +11,7 @@ import {
 import { tank, dps, support } from "../util/characters";
 import { styles } from "../util/consts";
 import { motion } from "framer-motion";
+import { Character } from "../util/interfaces";
 
 export const HeroPool = ({
   selected,
@@ -19,6 +20,7 @@ export const HeroPool = ({
   setCharacterGuess,
   isDisabled,
   isLargeSize,
+  guesses,
 }: {
   selected: string;
   numCols: number;
@@ -26,6 +28,7 @@ export const HeroPool = ({
   setCharacterGuess: any;
   isDisabled: boolean;
   isLargeSize?: boolean;
+  guesses: Character[];
 }) => {
   const characters = type === "support" ? support : type === "dps" ? dps : tank;
   const typeIcon =
@@ -78,6 +81,9 @@ export const HeroPool = ({
         justifyContent={"center"}
       >
         {characters.map((character) => {
+          const isGuessed = guesses.some(
+            (guess) => character.name === guess.name
+          );
           const isSelected = selected === character.name;
           return (
             <Popover isOpen={isSelected} placement="bottom">
@@ -93,7 +99,7 @@ export const HeroPool = ({
                   variants={iconButtonVariants}
                   animate={isSelected ? "selected" : "notSelected"}
                   zIndex={isSelected ? 1 : 0}
-                  isDisabled={isDisabled}
+                  isDisabled={isDisabled || isGuessed}
                   onClick={() => {
                     isSelected
                       ? setCharacterGuess("")

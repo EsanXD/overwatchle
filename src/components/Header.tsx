@@ -11,7 +11,7 @@ export const Header = () => {
       px={4}
     >
       <Image
-        src={process.env.PUBLIC_URL + "/OverwatchleLogo.png"}
+        src={process.env.PUBLIC_URL + "/OverwatchleLogo.svg"}
         alt="Overwatchle logo"
         height={"10vh"}
       />

@@ -9,6 +9,7 @@ import {
   useToast,
   useMediaQuery,
   Spacer,
+  Text,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { styles } from "../util/consts";
@@ -36,13 +37,17 @@ export const App = ({
   back: any;
 }) => {
   const orange = "#FFA301";
-  const grey = "#2D4248";
+  const grey = "#40475B";
+  const darkGrey = "#272C3A";
   const blue = "#218ffe";
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
   const [modalActive, setModalActive] = useState<any>(ModalStates.TUTORIAL);
   const [selectedCharcter, setCharacter] = useState("");
   const [guesses, setGuesses] = useState<Character[]>([]);
   const [currentCharacter, setCurrentCharacter] = useState<Character>();
+  const [gameOver, setGameOver] = useState<boolean>(false);
+  const [seconds, setSeconds] = useState(0);
+  const [timerActive, setTimerActive] = useState(false);
   const toast = useToast();
 
   const [isLargeSize] = useMediaQuery("(min-width: 1364px)");
@@ -55,8 +60,22 @@ export const App = ({
     return Characters.find((c) => sanitizeText(c.name) === sanitizeText(name))!;
   };
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (timerActive) setSeconds((prevSeconds) => prevSeconds + 1);
+    }, 1000);
+
+    // Clean up the timer when the component is unmounted
+    return () => {
+      clearInterval(timer);
+    };
+  }, [timerActive]);
+
+  const actual = getCharacter(data.length ? data[0].hero : "");
+
   const handleSubmit = () => {
     if (currentCharacter) {
+      setTimerActive(true);
       setGuesses([...guesses, currentCharacter]);
       setCharacter("");
     } else {
@@ -68,6 +87,20 @@ export const App = ({
         isClosable: true,
       });
     }
+    if (currentCharacter === actual) {
+      setTimerActive(false);
+      setCharacter(currentCharacter.name);
+      setGameOver(true);
+    }
+  };
+
+  const formatTimer = (time: number) => {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = time % 60;
+    return `${hours > 0 ? hours + ":" : ""}${
+      minutes < 10 ? `0${minutes}` : minutes
+    }:${seconds < 10 ? `0${seconds}` : seconds}`;
   };
 
   useEffect(() => {
@@ -94,6 +127,7 @@ export const App = ({
         aria-label="settings"
         bgColor={orange}
         onClick={() => setSettingsOpen(true)}
+        zIndex={2}
         icon={<HamburgerIcon />}
       />
       <Flex
@@ -128,24 +162,38 @@ export const App = ({
                 alignItems={"center"}
                 flex={1}
               >
-                Timer
+                <Flex
+                  flexDirection={"column"}
+                  alignItems={"center"}
+                  bgColor={darkGrey}
+                  borderRadius={8}
+                  px={4}
+                >
+                  <Text as="em" color={"white"} style={styles.font}>
+                    {formatTimer(seconds)}
+                  </Text>
+                  <Text
+                    as="em"
+                    color={"white"}
+                    fontWeight={"light"}
+                    fontSize={10}
+                    style={styles.font}
+                  >
+                    {"OBJ CONTEST TIME"}
+                  </Text>
+                </Flex>
               </Flex>
             </Flex>
-            <Flex
-              direction={"column"}
-              p={4}
-              gap={4}
-              bgColor={"rgba(45, 66, 72, .8)"}
-            >
+            <Flex direction={"column"} p={4} gap={4} bgColor={darkGrey}>
               <Heading
-                fontSize={isLargeSize ? "xl" : "24"}
+                fontSize={isLargeSize ? "xl" : "20"}
                 as="em"
                 style={styles.font}
                 color={blue}
               >
                 {currentCharacter?.name ?? "CHARACTER"}
               </Heading>
-              <Button onClick={handleSubmit}>
+              <Button onClick={handleSubmit} style={styles.font} as={"em"}>
                 {currentCharacter ? "GUESS" : "SELECT"}
               </Button>
             </Flex>
@@ -163,8 +211,9 @@ export const App = ({
       >
         <HeroSelect
           isLargeSize={isLargeSize}
-          isDisabled={false}
+          isDisabled={gameOver}
           selected={selectedCharcter}
+          guesses={guesses}
           setCharacterGuess={(character: string) => {
             setCharacter(character);
           }}
