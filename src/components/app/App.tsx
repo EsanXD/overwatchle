@@ -1,13 +1,9 @@
 import {
   Flex,
-  Input,
   Image,
   Heading,
   Button,
-  Text,
-  Select,
   IconButton,
-  Box,
   Card,
   CardBody,
   useToast,
@@ -94,7 +90,7 @@ export const App = ({
       <IconButton
         position={"absolute"}
         left={4}
-        top={128}
+        top={"10vh"}
         aria-label="settings"
         bgColor={orange}
         onClick={() => setSettingsOpen(true)}
@@ -106,7 +102,11 @@ export const App = ({
         alignItems={isLargeSize ? "" : "center"}
       >
         {data.length ? (
-          <Scoreboard isLargeSize={isLargeSize} guesses={guesses} actual={getCharacter(data[0].hero)} />
+          <Scoreboard
+            isLargeSize={isLargeSize}
+            guesses={guesses}
+            actual={getCharacter(data[0].hero)}
+          />
         ) : (
           <></>
         )}
