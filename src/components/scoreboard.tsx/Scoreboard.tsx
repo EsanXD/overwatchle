@@ -116,11 +116,22 @@ export const Scoreboard = ({
                     <Td p={0}>
                       <Flex
                         gap={4}
-                        justifyContent={"space-around"}
+                        justifyContent={"space-between"}
+                        alignItems={"center"}
                         bgColor={isCorrect ? green : red}
+                        flex={1}
+                        minWidth={"290"}
                         pr={4}
                       >
-                        <Image height={50} src={guess.img} mr={12} />
+                        <Image height={50} src={guess.img} />
+                        <Text
+                          flex={1}
+                          style={styles.font}
+                          as="em"
+                          textAlign={"start"}
+                        >
+                          {guess.name}
+                        </Text>
                         {isCorrect ? (
                           <Flex
                             minWidth={"50px"}
@@ -142,7 +153,7 @@ export const Scoreboard = ({
                         ) : (
                           <Flex
                             minWidth={"50px"}
-                            h={"50px !important"}
+                            h={"50px"}
                             borderRadius={"50%"}
                             backgroundImage={`conic-gradient(#f99e1a 0%, #f99e1a ${percentCorrect}%, #43484c ${percentCorrect}%, #43484c 100%)`}
                             justifyContent={"center"}
