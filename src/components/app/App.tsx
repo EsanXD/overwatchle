@@ -64,8 +64,6 @@ export const App = ({
     const timer = setInterval(() => {
       if (timerActive) setSeconds((prevSeconds) => prevSeconds + 1);
     }, 1000);
-
-    // Clean up the timer when the component is unmounted
     return () => {
       clearInterval(timer);
     };
@@ -179,7 +177,7 @@ export const App = ({
                     fontSize={10}
                     style={styles.font}
                   >
-                    {"OBJ CONTEST TIME"}
+                    {isLargeSize ? "OBJ CONTEST TIME" : "OBJ TIME"}
                   </Text>
                 </Flex>
               </Flex>

@@ -51,10 +51,16 @@ export const Scoreboard = ({
 
   return (
     <Flex flexDirection={"column"} alignItems={"center"} zIndex={1}>
-      <TableContainer borderRadius={8} overflowX="auto" maxWidth={"100vw"}>
+      <TableContainer
+        borderRadius={8}
+        overflowX="auto"
+        overflowY="auto"
+        maxWidth={"100vw"}
+        maxHeight={isLargeSize ? "400" : "30vh"}
+      >
         <Table align="center" variant={"simple"} bg={"black"} sx={styles.font}>
-          <Thead bgColor={"white"}>
-            <Tr>
+          <Thead bgColor={"white"} pos={"sticky"} top={0}>
+            <Tr pos={"sticky"}>
               {headers.map((header) => (
                 <Th textAlign={"center"} sx={styles.font}>
                   {header}
