@@ -18,9 +18,11 @@ import {
 export const Scoreboard = ({
   guesses,
   actual,
+  isLargeSize,
 }: {
   guesses: Character[];
   actual: Character;
+  isLargeSize: boolean;
 }) => {
   const headers = ["", "", "GENDER", "RACE", "ORG", "PROJECTILE", "RELEASE"];
   const roleIcon = {
@@ -31,13 +33,8 @@ export const Scoreboard = ({
 
   return (
     <Flex flexDirection={"column"} alignItems={"center"} zIndex={1}>
-      <TableContainer borderRadius={8}>
-        <Table
-          align="center"
-          variant={"unstyled"}
-          bg={"black"}
-          sx={styles.font}
-        >
+      <TableContainer borderRadius={8} overflowX="auto" maxWidth={"100vw"}>
+        <Table align="center" variant={"simple"} bg={"black"} sx={styles.font}>
           <Thead bgColor={"white"}>
             <Tr>
               {headers.map((header) => (
@@ -91,28 +88,33 @@ export const Scoreboard = ({
                     <Td p={0}>
                       <Flex
                         gap={4}
-                        justifyContent={"space-between"}
+                        justifyContent={"space-around"}
                         bgColor={isCorrect ? green : red}
+                        pr={4}
                       >
-                        <Image height={50} src={guess.img} />
+                        <Image height={50} src={guess.img} mr={12} />
                         {isCorrect ? (
                           <Flex
-                            w={50}
-                            h={50}
+                            minWidth={"50px"}
+                            h={"50px"}
                             borderRadius={"50%"}
                             bgImage={
                               "radial-gradient(circle, white,#CCFEFF,#28D0F0, #1E7AE9)"
                             }
-                            mr={2}
                             justifyContent={"center"}
                             alignItems={"center"}
                           >
-                            <CheckIcon fontSize={20} color={"#1E7AE9"} />
+                            <CheckIcon
+                              w={30}
+                              h={30}
+                              fontSize={20}
+                              color={"#1E7AE9"}
+                            />
                           </Flex>
                         ) : (
                           <Flex
-                            w={50}
-                            h={50}
+                            minWidth={"50px"}
+                            h={"50px !important"}
                             borderRadius={"50%"}
                             backgroundImage={`conic-gradient(#f99e1a 0%, #f99e1a ${percentCorrect}%, #43484c ${percentCorrect}%, #43484c 100%)`}
                             justifyContent={"center"}
@@ -208,8 +210,11 @@ export const Scoreboard = ({
           </Tbody>
         </Table>
       </TableContainer>
-      //TODO only appear when size triggers table
-      <Text>SCROLL HORIZONTALLY TO SEE MORE</Text>
+      {!isLargeSize && (
+        <Text>
+          {"<--"}SCROLL HORIZONTALLY TO SEE MORE{"-->"}
+        </Text>
+      )}
     </Flex>
   );
 };

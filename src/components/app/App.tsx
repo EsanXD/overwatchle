@@ -1,17 +1,14 @@
 import {
   Flex,
-  Input,
   Image,
   Heading,
   Button,
-  Text,
-  Select,
   IconButton,
-  Box,
   Card,
   CardBody,
   useToast,
   useMediaQuery,
+  Spacer,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { styles } from "../util/consts";
@@ -48,7 +45,7 @@ export const App = ({
   const [currentCharacter, setCurrentCharacter] = useState<Character>();
   const toast = useToast();
 
-  const [isLargerThan1360] = useMediaQuery("(min-width: 1364px)");
+  const [isLargeSize] = useMediaQuery("(min-width: 1364px)");
 
   const sanitizeText = (text: string) => {
     return text.replace(/[^a-zA-Z]/g, "").toLowerCase();
@@ -61,6 +58,7 @@ export const App = ({
   const handleSubmit = () => {
     if (currentCharacter) {
       setGuesses([...guesses, currentCharacter]);
+      setCharacter("");
     } else {
       toast({
         title: "Please Select a Character",
@@ -83,36 +81,40 @@ export const App = ({
       flexGrow={1}
       direction="column"
       align="center"
-      justify="space-around"
+      justify="center"
       gap={2}
       width={"100vw"}
       overflow={"hidden"}
     >
+      <Spacer />
       <IconButton
         position={"absolute"}
         left={4}
-        top={128}
+        top={"10vh"}
         aria-label="settings"
         bgColor={orange}
         onClick={() => setSettingsOpen(true)}
         icon={<HamburgerIcon />}
       />
-
       <Flex
         gap={4}
-        flexDir={isLargerThan1360 ? "row" : "column"}
-        alignItems={isLargerThan1360 ? "" : "center"}
+        flexDir={isLargeSize ? "row" : "column"}
+        alignItems={isLargeSize ? "" : "center"}
       >
         {data.length ? (
-          <Scoreboard guesses={guesses} actual={getCharacter(data[0].hero)} />
+          <Scoreboard
+            isLargeSize={isLargeSize}
+            guesses={guesses}
+            actual={getCharacter(data[0].hero)}
+          />
         ) : (
           <></>
         )}
-        <Card zIndex={1} maxHeight={300} w={isLargerThan1360 ? 350 : "50vw"}>
-          <CardBody p={0} w={isLargerThan1360 ? 350 : "50vw"}>
+        <Card zIndex={1} maxHeight={262} w={isLargeSize ? 350 : "50vw"}>
+          <CardBody p={0} w={isLargeSize ? 350 : "50vw"}>
             <Flex bgColor={grey}>
               <Image
-                height={isLargerThan1360 ? 150 : 75}
+                height={isLargeSize ? 150 : 75}
                 src={
                   currentCharacter?.img ??
                   "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt451e9e607acad0dc/64a72e2c9d480a8704791cbd/Dive_Into_Enemy_Lines.png?format=webply&quality=90"
@@ -121,7 +123,7 @@ export const App = ({
                 borderRadius="lg"
               />
               <Flex
-                height={isLargerThan1360 ? 150 : 75}
+                height={isLargeSize ? 150 : 75}
                 justifyContent={"center"}
                 alignItems={"center"}
                 flex={1}
@@ -135,7 +137,12 @@ export const App = ({
               gap={4}
               bgColor={"rgba(45, 66, 72, .8)"}
             >
-              <Heading as="em" style={styles.font} color={blue}>
+              <Heading
+                fontSize={isLargeSize ? "xl" : "24"}
+                as="em"
+                style={styles.font}
+                color={blue}
+              >
                 {currentCharacter?.name ?? "CHARACTER"}
               </Heading>
               <Button onClick={handleSubmit}>
@@ -145,7 +152,7 @@ export const App = ({
           </CardBody>
         </Card>
       </Flex>
-
+      <Spacer />
       <Flex
         direction={"row"}
         wrap={"wrap"}
@@ -155,6 +162,7 @@ export const App = ({
         pb={8}
       >
         <HeroSelect
+          isLargeSize={isLargeSize}
           isDisabled={false}
           selected={selectedCharcter}
           setCharacterGuess={(character: string) => {
