@@ -1,17 +1,20 @@
 import { Flex, IconButton, useBreakpointValue, Image } from "@chakra-ui/react";
 import { HeroPool } from "./HeroPool";
 import { useState } from "react";
+import { Character } from "../util/interfaces";
 
 export const HeroSelect = ({
   selected,
   setCharacterGuess,
   isDisabled,
   isLargeSize,
+  guesses,
 }: {
   selected: string;
   setCharacterGuess: any;
   isDisabled: boolean;
   isLargeSize: boolean;
+  guesses: Character[];
 }) => {
   const [filter, setFilter] = useState("tank");
   const typeIcons = [
@@ -36,6 +39,7 @@ export const HeroSelect = ({
           py={8}
         >
           <HeroPool
+            guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}
             selected={selected}
@@ -44,6 +48,7 @@ export const HeroSelect = ({
             type={"tank"}
           />
           <HeroPool
+            guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}
             selected={selected}
@@ -52,6 +57,7 @@ export const HeroSelect = ({
             type={"dps"}
           />
           <HeroPool
+            guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}
             selected={selected}
@@ -84,6 +90,7 @@ export const HeroSelect = ({
           </Flex>
 
           <HeroPool
+            guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}
             selected={selected}

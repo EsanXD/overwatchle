@@ -17,19 +17,16 @@ export const TutorialModal = ({ onClose }: { onClose: () => void }) => {
   const [page, setPage] = useState(0);
 
   const getPage = () => {
-    switch (page) {
-      case 0:
-        return "WELCOME TO OVERWATCHLE! THIS IS A GAME WHERE YOU GUESS THE ABILITY OF A RANDOM OVERWATCH HERO.";
-      case 1:
-        return "YOU WILL BE PRESENTED WITH A RANDOM ABILITY AND YOU MUST GUESS THE NAME OF THAT ABILITY.";
-      case 2:
-        return "YOU CAN SELECT THE HERO FIRST THEN TYPE IN THE ABILITY NAME OR SELECT THE HERO AND ABILITY FROM A DROPDOWN.";
-      case 3:
-        return "YOU WILL GAIN POINTS FOR SELECTING THE CORRECT HERO AND ABILITY.";
-      case 4:
-        return "IF YOU ARE PLAYING ENDLESS YOU WILL LOSE LIVES FOR SELECTING THE INCORRECT HERO AND ABILITY.";
-      case 5:
-        return "THAT'S IT! HAVE FUN PLAYING!";
+    const texts = [
+      "WELCOME TO OVERWATCHLE! THIS IS A GAME WHERE YOU GUESS THE RANDOM HERO OF THE DAY",
+      "YOU WILL SELECT A CHARCTER ON THE BOTTOM OF THE SCREEN, THEN CLICK SUBMIT",
+      "FOR EVERY CORRECT ATRIBUTE OF THE HERO YOU GUESSED, YOU WILL GET HINTS ON THE SCREEN.",
+      "IF A ATRIBUTE IS GREEN, IT MEANS YOU GOT IT RIGHT! IF YOU GET IT WRONG, IT WILL BE RED.",
+      "IF THE ATRIBUTE IS ORANGE IT MEANS YOU ARE PARTIALLY CORRECT.",
+    ];
+    switch (page < texts.length) {
+      case true:
+        return texts[page];
       default:
         return "THAT'S IT! HAVE FUN PLAYING!";
     }

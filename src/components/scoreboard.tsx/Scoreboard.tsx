@@ -24,19 +24,43 @@ export const Scoreboard = ({
   actual: Character;
   isLargeSize: boolean;
 }) => {
-  const headers = ["", "", "GENDER", "RACE", "ORG", "PROJECTILE", "RELEASE"];
+  const headers = ["", "", "SEX", "RACE", "ORG", "PROJECTILE", "RELEASE"];
   const roleIcon = {
     tank: "/Circle_Tank.svg",
     dps: "/Circle_Damage.svg",
     support: "/Circle_Support.svg",
   };
 
+  function isPartial(str1: string, str2: string): boolean | undefined {
+    const arr1 = str1.split("/");
+    const arr2 = str2.split("/");
+
+    const intersection = arr1.filter((element) => arr2.includes(element));
+
+    if (
+      intersection.length === arr1.length &&
+      intersection.length === arr2.length
+    ) {
+      return true; // Exact same elements
+    } else if (intersection.length > 0) {
+      return undefined; // Partially the same
+    }
+
+    return false; // No intersection
+  }
+
   return (
     <Flex flexDirection={"column"} alignItems={"center"} zIndex={1}>
-      <TableContainer borderRadius={8} overflowX="auto" maxWidth={"100vw"}>
+      <TableContainer
+        borderRadius={8}
+        overflowX="auto"
+        overflowY="auto"
+        maxWidth={"100vw"}
+        maxHeight={isLargeSize ? "400" : "30vh"}
+      >
         <Table align="center" variant={"simple"} bg={"black"} sx={styles.font}>
-          <Thead bgColor={"white"}>
-            <Tr>
+          <Thead bgColor={"white"} pos={"sticky"} top={0}>
+            <Tr pos={"sticky"}>
               {headers.map((header) => (
                 <Th textAlign={"center"} sx={styles.font}>
                   {header}
@@ -49,13 +73,14 @@ export const Scoreboard = ({
               const isCorrect = guess.name === actual.name;
               const role = guess.role === actual.role;
               const gender = guess.gender === actual.gender;
-              const org = guess.org === actual.org;
+              const org = isPartial(guess.org, actual.org);
               const race = guess.race === actual.race;
-              const projectileType =
-                guess.projectileType === actual.projectileType;
+              const projectileType = isPartial(
+                guess.projectileType,
+                actual.projectileType
+              );
               const releaseYear = guess.releaseYear === actual.releaseYear;
-              const fieldGuesses: boolean[] = [
-                isCorrect,
+              const fieldGuesses: (boolean | undefined)[] = [
                 role,
                 gender,
                 org,
@@ -63,12 +88,15 @@ export const Scoreboard = ({
                 projectileType,
                 releaseYear,
               ];
-              const numCorrect = fieldGuesses.filter((f) => f).length;
+              const numCorrect = fieldGuesses.filter(
+                (f) => typeof f === "undefined" || f
+              ).length;
               const percentCorrect = Math.ceil(
                 (numCorrect / fieldGuesses.length) * 100
               );
               const red = "#E82D4F";
               const green = "#01BA01";
+              const orange = "#FFA301";
 
               return (
                 <>
@@ -171,7 +199,13 @@ export const Scoreboard = ({
                       <Flex
                         h={50}
                         w={"100%"}
-                        bgColor={org ? green : red}
+                        bgColor={
+                          typeof org === "undefined"
+                            ? orange
+                            : org
+                            ? green
+                            : red
+                        }
                         justifyContent={"center"}
                         alignItems={"center"}
                       >
@@ -183,7 +217,13 @@ export const Scoreboard = ({
                       <Flex
                         h={50}
                         w={"100%"}
-                        bgColor={projectileType ? green : red}
+                        bgColor={
+                          typeof projectileType === "undefined"
+                            ? orange
+                            : projectileType
+                            ? green
+                            : red
+                        }
                         justifyContent={"center"}
                         alignItems={"center"}
                       >
