@@ -13,10 +13,14 @@ const Home = () => {
   const [data, setData] = useState<DailyWord[]>([]);
   const [endless, setEndless] = useState(false);
   const [showMenu, setShowMenu] = useState(true);
-
+  const [firstTime, setFirstTime] = useState(true);
   const [init, setInit] = useState(false);
 
   useEffect(() => {
+    const hasVisited = localStorage.getItem("visited");
+    if (hasVisited) {
+      setFirstTime(false);
+    }
     initParticlesEngine(async (engine) => {
       await loadSlim(engine);
     }).then(() => {
@@ -50,7 +54,12 @@ const Home = () => {
       {showMenu ? (
         <Menu setEndless={setEndless} showMenu={setShowMenu} />
       ) : (
-        <App endless={endless} data={data} back={() => setShowMenu(true)} />
+        <App
+          firstTime={firstTime}
+          endless={endless}
+          data={data}
+          back={() => setShowMenu(true)}
+        />
       )}
       {init && (
         <Particles

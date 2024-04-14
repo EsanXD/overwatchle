@@ -31,17 +31,21 @@ export const App = ({
   data,
   endless,
   back,
+  firstTime,
 }: {
   data: DailyWord[];
   endless: boolean;
   back: any;
+  firstTime: boolean;
 }) => {
   const orange = "#FFA301";
   const grey = "#40475B";
   const darkGrey = "#272C3A";
   const blue = "#218ffe";
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
-  const [modalActive, setModalActive] = useState<any>(ModalStates.TUTORIAL);
+  const [modalActive, setModalActive] = useState<any>(
+    firstTime ? ModalStates.TUTORIAL : ""
+  );
   const [selectedCharcter, setCharacter] = useState("");
   const [guesses, setGuesses] = useState<Character[]>([]);
   const [currentCharacter, setCurrentCharacter] = useState<Character>();
@@ -110,6 +114,7 @@ export const App = ({
   useEffect(() => {
     if (seconds === 0) return;
     const date = DateTime.now().toFormat("dd/MM/yyyy");
+    localStorage.setItem("visited", "true");
     localStorage.setItem(date, JSON.stringify({ guesses, gameOver, seconds }));
   }, [gameOver, guesses, seconds]);
 

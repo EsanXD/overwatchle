@@ -24,7 +24,7 @@ export const Scoreboard = ({
   actual: Character;
   isLargeSize: boolean;
 }) => {
-  const headers = ["", "", "SEX", "RACE", "ORG", "PROJECTILE", "RELEASE"];
+  const headers = ["", "", "SEX", "RACE", "ORGANIZATION", "PROJECTILE", "RELEASE"];
   const roleIcon = {
     tank: "/Circle_Tank.svg",
     dps: "/Circle_Damage.svg",
