@@ -8,7 +8,6 @@ import {
   CardBody,
   useToast,
   useMediaQuery,
-  Spacer,
   Text,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
@@ -20,6 +19,7 @@ import { TutorialModal } from "../modals/Tutorial";
 import { Settings } from "../menu/Settings";
 import { Scoreboard } from "../scoreboard.tsx/Scoreboard";
 import { Characters } from "../util/characters";
+import { DateTime } from "luxon";
 
 const ModalStates = {
   TUTORIAL: "tutorial",
@@ -50,7 +50,7 @@ export const App = ({
   const [timerActive, setTimerActive] = useState(false);
   const toast = useToast();
 
-  const [isLargeSize] = useMediaQuery("(min-width: 1364px)");
+  const [isLargeSize] = useMediaQuery("(min-width: 1530px)");
 
   const sanitizeText = (text: string) => {
     return text.replace(/[^a-zA-Z]/g, "").toLowerCase();
@@ -72,6 +72,7 @@ export const App = ({
   const actual = getCharacter(data.length ? data[0].hero : "");
 
   const handleSubmit = () => {
+    if (gameOver) return;
     if (currentCharacter) {
       setTimerActive(true);
       setGuesses([...guesses, currentCharacter]);
@@ -106,18 +107,36 @@ export const App = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCharcter]);
 
+  useEffect(() => {
+    if (seconds === 0) return;
+    const date = DateTime.now().toFormat("dd/MM/yyyy");
+    localStorage.setItem(date, JSON.stringify({ guesses, gameOver, seconds }));
+  }, [gameOver, guesses, seconds]);
+
+  useEffect(() => {
+    const date = DateTime.now().toFormat("dd/MM/yyyy");
+    const storedData = localStorage.getItem(date);
+    if (storedData) {
+      const data = JSON.parse(storedData);
+      setGuesses(data.guesses);
+      setGameOver(data.gameOver);
+      setSeconds(data.seconds);
+      if (data.gameOver) setTimerActive(false);
+      else setTimerActive(true);
+    }
+  }, []);
+
   return (
     <Flex
       bg={"rgba(229, 235, 244, .8)"}
       flexGrow={1}
       direction="column"
-      align="center"
-      justify="center"
+      alignItems="center"
+      justifyContent="space-around"
       gap={2}
       width={"100vw"}
       overflow={"hidden"}
     >
-      <Spacer />
       <IconButton
         position={"absolute"}
         left={4}
@@ -142,9 +161,9 @@ export const App = ({
         ) : (
           <></>
         )}
-        <Card zIndex={1} maxHeight={262} w={isLargeSize ? 350 : "50vw"}>
-          <CardBody p={0} w={isLargeSize ? 350 : "50vw"}>
-            <Flex bgColor={grey}>
+        <Card zIndex={1} maxHeight={262} w={isLargeSize ? 350 : "90vw"}>
+          <CardBody p={0} w={"100%"}>
+            <Flex bgColor={grey} flex={1}>
               <Image
                 height={isLargeSize ? 150 : 75}
                 src={
@@ -198,7 +217,6 @@ export const App = ({
           </CardBody>
         </Card>
       </Flex>
-      <Spacer />
       <Flex
         direction={"row"}
         wrap={"wrap"}
