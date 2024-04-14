@@ -1,24 +1,25 @@
 import {
   Flex,
-  Input,
   Image,
   Heading,
   Button,
-  Text,
-  Select,
   IconButton,
-  Box,
+  Card,
+  CardBody,
+  useToast,
+  useMediaQuery,
+  Spacer,
+  Text,
 } from "@chakra-ui/react";
-import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
-import { abilities, styles } from "../util/consts";
-import { HeroSelect } from "./HeroSelect";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import { styles } from "../util/consts";
+import { HeroSelect } from "../heroSelect/HeroSelect";
 import { useEffect, useState } from "react";
-import { DailyWord } from "../util/interfaces";
-import { ScoreModal } from "../modals/Score";
-import { EndlessModal } from "../modals/Endless";
+import { Character, DailyWord } from "../util/interfaces";
 import { TutorialModal } from "../modals/Tutorial";
 import { Settings } from "../menu/Settings";
-import { DateTime } from "luxon";
+import { Scoreboard } from "../scoreboard.tsx/Scoreboard";
+import { Characters } from "../util/characters";
 
 const ModalStates = {
   TUTORIAL: "tutorial",
@@ -35,126 +36,75 @@ export const App = ({
   endless: boolean;
   back: any;
 }) => {
+  const orange = "#FFA301";
+  const grey = "#40475B";
+  const darkGrey = "#272C3A";
+  const blue = "#218ffe";
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
   const [modalActive, setModalActive] = useState<any>(ModalStates.TUTORIAL);
-  const [score, setScore] = useState(0);
-  const [scores, setScores] = useState<number[]>([]);
   const [selectedCharcter, setCharacter] = useState("");
-  const [ability, setAbility] = useState("");
-  const [turn, setTurn] = useState(0);
-  const [guesses, setGuesses] = useState<string[]>([]);
-  const [easyMode, setEasyMode] = useState(true);
-  const [endlessData, setEndlessData] = useState<DailyWord>(
-    abilities[Math.floor((Math.random() * 100000) % abilities.length)]
-  );
-  const [previousData, setPreviousData] = useState<DailyWord>(endlessData);
-  const [strikes, setStrikes] = useState(0);
-  const [gameOver, setGameOver] = useState(false);
-  const [availableAbilities, setAvailableAbilities] = useState<DailyWord[]>([]);
+  const [guesses, setGuesses] = useState<Character[]>([]);
+  const [currentCharacter, setCurrentCharacter] = useState<Character>();
+  const [gameOver, setGameOver] = useState<boolean>(false);
+  const [seconds, setSeconds] = useState(0);
+  const [timerActive, setTimerActive] = useState(false);
+  const toast = useToast();
 
-  useEffect(() => {
-    const available = abilities.filter(
-      (hero) =>
-        sanitizeText(hero.hero.toUpperCase()) ===
-        sanitizeText(selectedCharcter.toUpperCase())
-    );
-    setAvailableAbilities(available);
-    easyMode &&
-      setAbility(
-        available.length > 0 ? available[0].ability.toUpperCase() : ""
-      );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCharcter]);
-
-  const handleChange = (
-    event:
-      | React.FormEvent<HTMLInputElement>
-      | React.FormEvent<HTMLSelectElement>
-  ) => setAbility(event.currentTarget.value);
+  const [isLargeSize] = useMediaQuery("(min-width: 1364px)");
 
   const sanitizeText = (text: string) => {
     return text.replace(/[^a-zA-Z]/g, "").toLowerCase();
   };
 
-  const getStrikeIcons = () => {
-    let icons = [];
-    for (let i = 0; i < 5; i++) {
-      icons.push(<CloseIcon color={i < strikes ? "red" : "#218ffe"} />);
-    }
-    return icons;
+  const getCharacter = (name: string): Character => {
+    return Characters.find((c) => sanitizeText(c.name) === sanitizeText(name))!;
   };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (timerActive) setSeconds((prevSeconds) => prevSeconds + 1);
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [timerActive]);
+
+  const actual = getCharacter(data.length ? data[0].hero : "");
 
   const handleSubmit = () => {
-    if (!selectedCharcter || !ability || turn === 3 || data.length === 0)
-      return;
-    let pointsGained = 0;
-    if (sanitizeText(ability) === sanitizeText(data[turn].ability)) {
-      pointsGained += 2;
-    }
-    if (sanitizeText(selectedCharcter) === sanitizeText(data[turn].hero)) {
-      pointsGained += 1;
-    }
-    setPreviousData(data[turn]);
-    setScore(score + pointsGained);
-    setScores([...scores, pointsGained]);
-    setAbility("");
-    turn === 2 && setGameOver(true);
-    setTurn(turn + 1);
-    setGuesses([...guesses, `${selectedCharcter}: ${ability}`]);
-    setCharacter("");
-    setModalActive(ModalStates.SHOW_SCORE);
-  };
-
-  const handleSubmitEndless = () => {
-    if (!selectedCharcter || !ability) return;
-    let pointsLost = 0;
-    if (sanitizeText(ability) !== sanitizeText(endlessData.ability)) {
-      pointsLost += 1;
-    }
-    if (sanitizeText(selectedCharcter) !== sanitizeText(endlessData.hero)) {
-      pointsLost += 2;
-    }
-    setPreviousData(endlessData);
-    setEndlessData(
-      abilities[Math.floor((Math.random() * 100000) % abilities.length)]
-    );
-    setAbility("");
-    setStrikes(strikes + pointsLost);
-    setTurn(turn + 1);
-    setCharacter("");
-    if (strikes + pointsLost >= 5) {
-      setGameOver(true);
-      setModalActive(ModalStates.GAME_OVER);
+    if (currentCharacter) {
+      setTimerActive(true);
+      setGuesses([...guesses, currentCharacter]);
+      setCharacter("");
     } else {
-      setModalActive(ModalStates.SHOW_SCORE);
+      toast({
+        title: "Please Select a Character",
+        description: "No character has been selected",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+    if (currentCharacter === actual) {
+      setTimerActive(false);
+      setCharacter(currentCharacter.name);
+      setGameOver(true);
     }
   };
 
-  useEffect(() => {
-    //on startup load data.
-    const today = DateTime.now().toFormat("dd/MM/yyyy");
-    // { score: num, turn: num}
-    const savedData = localStorage.getItem(today);
-    if (savedData && !endless) {
-      const { oldScore, oldTurn, gameOver } = JSON.parse(savedData);
-      setScore(oldScore);
-      setTurn(oldTurn);
-      setGameOver(gameOver);
-    }
-  }, []);
+  const formatTimer = (time: number) => {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = time % 60;
+    return `${hours > 0 ? hours + ":" : ""}${
+      minutes < 10 ? `0${minutes}` : minutes
+    }:${seconds < 10 ? `0${seconds}` : seconds}`;
+  };
 
   useEffect(() => {
-    //on startup load data.
-    const today = DateTime.now().toFormat("dd/MM/yyyy");
-    // { score: num, turn: num}
-    if (turn !== 0 && !endless) {
-      localStorage.setItem(
-        today,
-        JSON.stringify({ oldScore: score, oldTurn: turn, gameOver: gameOver })
-      );
-      console.log("saving", score, turn);
-    }
-  }, [turn, score]);
+    setCurrentCharacter(getCharacter(selectedCharcter));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCharcter]);
 
   return (
     <Flex
@@ -162,115 +112,93 @@ export const App = ({
       flexGrow={1}
       direction="column"
       align="center"
-      justify="space-between"
+      justify="center"
       gap={2}
       width={"100vw"}
       overflow={"hidden"}
     >
-      <Flex justifyContent={"center"} alignItems={"center"}>
-        <IconButton
-          position={"absolute"}
-          left={4}
-          aria-label="settings"
-          colorScheme="orange"
-          onClick={() => setSettingsOpen(true)}
-          icon={<HamburgerIcon />}
-        />
-        <Flex flexDirection={"column"} alignItems={"center"}>
-          {gameOver ? (
-            <Heading as="em" style={styles.font} colorScheme="red">
-              GAME OVER
-            </Heading>
-          ) : (
-            <Heading as="em" style={styles.font} color={"#43484c"}>
-              STAGE {turn + 1}
-            </Heading>
-          )}
-          {endless ? (
-            <Heading>{getStrikeIcons()}</Heading>
-          ) : (
-            <Heading as="em" style={styles.font} color={"#43484c"}>
-              SCORE: {score}
-            </Heading>
-          )}
-        </Flex>
-      </Flex>
-      {(endless || (!endless && turn < 3 && data.length > 0)) && (
-        <Flex
-          bgColor={"#43484c"}
-          borderRadius={"100%"}
-          height={192}
-          width={192}
-          alignItems={"center"}
-          justifyContent={"center"}
-          border={"4px solid white"}
-          zIndex={50}
-        >
-          <Image
-            zIndex={50}
-            loading="lazy"
-            maxHeight={128}
-            maxWidth={128}
-            src={endless ? endlessData.img : data[turn].img}
+      <Spacer />
+      <IconButton
+        position={"absolute"}
+        left={4}
+        top={"10vh"}
+        aria-label="settings"
+        bgColor={orange}
+        onClick={() => setSettingsOpen(true)}
+        zIndex={2}
+        icon={<HamburgerIcon />}
+      />
+      <Flex
+        gap={4}
+        flexDir={isLargeSize ? "row" : "column"}
+        alignItems={isLargeSize ? "" : "center"}
+      >
+        {data.length ? (
+          <Scoreboard
+            isLargeSize={isLargeSize}
+            guesses={guesses}
+            actual={getCharacter(data[0].hero)}
           />
-        </Flex>
-      )}
-      {gameOver && !endless && (
-        <Flex
-          flexDirection={"row"}
-          gap={4}
-          alignItems={"center"}
-          justifyContent={"space-between"}
-        >
-          {data.map((turn, index) => (
-            <Flex
-              flexDirection={"column"}
-              alignItems={"center"}
-              justifyContent={"space-between"}
-              width={"30vw"}
-            >
-              <Image loading="lazy" width={"20vw"} src={turn.img} />
-              <Text style={styles.font} textAlign={"center"}>
-                {turn.hero.toUpperCase()}: {turn.ability.toUpperCase()}
-              </Text>
-            </Flex>
-          ))}
-        </Flex>
-      )}
-      <Flex alignItems={"center"} gap={8} width={"85vw"}>
-        {easyMode ? (
-          <Select
-            disabled={selectedCharcter === "" || (turn === 3 && !endless)}
-            value={ability}
-            onChange={handleChange}
-            style={styles.font}
-            bg={"rgb(229, 235, 244)"}
-            zIndex={50}
-          >
-            {availableAbilities.map((hero) => (
-              <option value={hero.ability}>{hero.ability.toUpperCase()}</option>
-            ))}
-          </Select>
         ) : (
-          <Input
-            isDisabled={turn === 3 && !endless}
-            value={ability}
-            onChange={handleChange}
-            style={styles.font}
-            placeholder="GUESS THE ABILITY"
-            bgColor={"white"}
-            zIndex={50}
-          />
+          <></>
         )}
-        <Button
-          style={{ ...styles.primary, ...styles.font }}
-          size={{ base: "sm", sm: "md", md: "lg", lg: "lg" }}
-          onClick={endless ? handleSubmitEndless : handleSubmit}
-        >
-          GUESS
-        </Button>
+        <Card zIndex={1} maxHeight={262} w={isLargeSize ? 350 : "50vw"}>
+          <CardBody p={0} w={isLargeSize ? 350 : "50vw"}>
+            <Flex bgColor={grey}>
+              <Image
+                height={isLargeSize ? 150 : 75}
+                src={
+                  currentCharacter?.img ??
+                  "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt451e9e607acad0dc/64a72e2c9d480a8704791cbd/Dive_Into_Enemy_Lines.png?format=webply&quality=90"
+                }
+                alt="selected character image"
+                borderRadius="lg"
+              />
+              <Flex
+                height={isLargeSize ? 150 : 75}
+                justifyContent={"center"}
+                alignItems={"center"}
+                flex={1}
+              >
+                <Flex
+                  flexDirection={"column"}
+                  alignItems={"center"}
+                  bgColor={darkGrey}
+                  borderRadius={8}
+                  px={4}
+                >
+                  <Text as="em" color={"white"} style={styles.font}>
+                    {formatTimer(seconds)}
+                  </Text>
+                  <Text
+                    as="em"
+                    color={"white"}
+                    fontWeight={"light"}
+                    fontSize={10}
+                    style={styles.font}
+                  >
+                    {isLargeSize ? "OBJ CONTEST TIME" : "OBJ TIME"}
+                  </Text>
+                </Flex>
+              </Flex>
+            </Flex>
+            <Flex direction={"column"} p={4} gap={4} bgColor={darkGrey}>
+              <Heading
+                fontSize={isLargeSize ? "xl" : "20"}
+                as="em"
+                style={styles.font}
+                color={blue}
+              >
+                {currentCharacter?.name ?? "CHARACTER"}
+              </Heading>
+              <Button onClick={handleSubmit} style={styles.font} as={"em"}>
+                {currentCharacter ? "GUESS" : "SELECT"}
+              </Button>
+            </Flex>
+          </CardBody>
+        </Card>
       </Flex>
-
+      <Spacer />
       <Flex
         direction={"row"}
         wrap={"wrap"}
@@ -280,45 +208,24 @@ export const App = ({
         pb={8}
       >
         <HeroSelect
-          isDisabled={turn === 3 && !endless}
+          isLargeSize={isLargeSize}
+          isDisabled={gameOver}
           selected={selectedCharcter}
+          guesses={guesses}
           setCharacterGuess={(character: string) => {
             setCharacter(character);
           }}
         />
       </Flex>
 
-      {modalActive === ModalStates.SHOW_SCORE && (
-        <ScoreModal
-          endless={endless}
-          data={previousData}
-          onClose={() => {
-            setModalActive(undefined);
-          }}
-          score={score}
-        />
-      )}
-      {modalActive === ModalStates.GAME_OVER && (
-        <EndlessModal
-          turn={turn - 1}
-          onClose={() => {
-            setGameOver(false);
-            setStrikes(0);
-            setTurn(0);
-            setModalActive(undefined);
-          }}
-        />
-      )}
       {modalActive === ModalStates.TUTORIAL && (
         <TutorialModal onClose={() => setModalActive(undefined)} />
       )}
       {settingsOpen && (
         <Settings
-          easyMode={easyMode}
           onClose={() => setSettingsOpen(false)}
           openMenu={back}
           openTutorial={() => setModalActive(ModalStates.TUTORIAL)}
-          toggleEasyMode={() => setEasyMode(!easyMode)}
         />
       )}
     </Flex>
