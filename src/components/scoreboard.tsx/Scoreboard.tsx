@@ -24,12 +24,20 @@ export const Scoreboard = ({
   actual: Character;
   isLargeSize: boolean;
 }) => {
-  const headers = ["", "", "SEX", "RACE", "ORGANIZATION", "PROJECTILE", "RELEASE"];
+  const headers = [
+    "",
+    "",
+    "SEX",
+    "RACE",
+    "ORGANIZATION",
+    "RELEASE",
+  ];
   const roleIcon = {
     tank: "/Circle_Tank.svg",
     dps: "/Circle_Damage.svg",
     support: "/Circle_Support.svg",
   };
+  const reversedList = guesses.slice().reverse();
 
   function isPartial(str1: string, str2: string): boolean | undefined {
     const arr1 = str1.split("/");
@@ -58,7 +66,7 @@ export const Scoreboard = ({
         maxWidth={"100vw"}
         maxHeight={isLargeSize ? "400" : "30vh"}
       >
-        <Table align="center" variant={"simple"} bg={"black"} sx={styles.font}>
+        <Table align="center" variant={"simple"} sx={styles.font}>
           <Thead bgColor={"white"} pos={"sticky"} top={0}>
             <Tr pos={"sticky"}>
               {headers.map((header) => (
@@ -69,7 +77,7 @@ export const Scoreboard = ({
             </Tr>
           </Thead>
           <Tbody>
-            {guesses.map((guess, index) => {
+            {reversedList.map((guess, index) => {
               const isCorrect = guess.name === actual.name;
               const role = guess.role === actual.role;
               const gender = guess.gender === actual.gender;
@@ -94,17 +102,14 @@ export const Scoreboard = ({
               const percentCorrect = Math.ceil(
                 (numCorrect / fieldGuesses.length) * 100
               );
-              const red = "#E82D4F";
-              const green = "#01BA01";
-              const orange = "#FFA301";
+              const red = "rgba(232,45,79,0.85)";
+              const green = "rgba(1,186,1,0.7)";
+              const orange = "rgba(255,163,1,0.8)";
+              const darkGrey = "#272C3A";
 
               return (
                 <>
-                  <Tr
-                    key={guess.name}
-                    bgColor={"rgba(40, 208, 240, 1)"}
-                    color={"white"}
-                  >
+                  <Tr key={guess.name} color={"white"}>
                     <Td p={0}>
                       <Image
                         height={50}
@@ -163,7 +168,7 @@ export const Scoreboard = ({
                               w={"40px"}
                               h={"40px"}
                               borderRadius={"50%"}
-                              bgColor={isCorrect ? green : red}
+                              bgColor={darkGrey}
                               justifyContent={"center"}
                               alignItems={"center"}
                             >

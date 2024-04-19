@@ -13,7 +13,7 @@ import {
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { styles } from "../util/consts";
 import { HeroSelect } from "../heroSelect/HeroSelect";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Character, DailyWord } from "../util/interfaces";
 import { TutorialModal } from "../modals/Tutorial";
 import { Settings } from "../menu/Settings";
@@ -55,14 +55,13 @@ export const App = ({
   const toast = useToast();
 
   const [isLargeSize] = useMediaQuery("(min-width: 1530px)");
-
   const sanitizeText = (text: string) => {
     return text.replace(/[^a-zA-Z]/g, "").toLowerCase();
   };
 
-  const getCharacter = (name: string): Character => {
+  const getCharacter = useCallback((name: string): Character => {
     return Characters.find((c) => sanitizeText(c.name) === sanitizeText(name))!;
-  };
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -75,7 +74,7 @@ export const App = ({
 
   const actual = getCharacter(data.length ? data[0].hero : "");
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (gameOver) return;
     if (currentCharacter) {
       setTimerActive(true);
@@ -95,7 +94,7 @@ export const App = ({
       setCharacter(currentCharacter.name);
       setGameOver(true);
     }
-  };
+  }, [actual, currentCharacter, gameOver, guesses, toast]);
 
   const formatTimer = (time: number) => {
     const hours = Math.floor(time / 3600);
@@ -108,11 +107,10 @@ export const App = ({
 
   useEffect(() => {
     setCurrentCharacter(getCharacter(selectedCharcter));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCharcter]);
+  }, [getCharacter, selectedCharcter]);
 
   useEffect(() => {
-    if (seconds === 0) return;
+    if (seconds === 0 || gameOver === true) return;
     const date = DateTime.now().toFormat("dd/MM/yyyy");
     localStorage.setItem("visited", "true");
     localStorage.setItem(date, JSON.stringify({ guesses, gameOver, seconds }));
@@ -121,7 +119,7 @@ export const App = ({
   useEffect(() => {
     const date = DateTime.now().toFormat("dd/MM/yyyy");
     const storedData = localStorage.getItem(date);
-    if (storedData) {
+    if (storedData && !seconds) {
       const data = JSON.parse(storedData);
       setGuesses(data.guesses);
       setGameOver(data.gameOver);
@@ -129,7 +127,18 @@ export const App = ({
       if (data.gameOver) setTimerActive(false);
       else setTimerActive(true);
     }
-  }, []);
+    const handleKeyPress = (event: any) => {
+      if (event.key === "Enter") {
+        handleSubmit();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleSubmit]);
 
   return (
     <Flex
@@ -216,7 +225,7 @@ export const App = ({
                 {currentCharacter?.name ?? "CHARACTER"}
               </Heading>
               <Button onClick={handleSubmit} style={styles.font} as={"em"}>
-                {currentCharacter ? "GUESS" : "SELECT"}
+                {currentCharacter ? "ENTER" : "SELECT"}
               </Button>
             </Flex>
           </CardBody>
