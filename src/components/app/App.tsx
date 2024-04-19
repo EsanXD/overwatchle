@@ -53,7 +53,6 @@ export const App = ({
   const [seconds, setSeconds] = useState(0);
   const [timerActive, setTimerActive] = useState(false);
   const toast = useToast();
-
   const [isLargeSize] = useMediaQuery("(min-width: 1530px)");
   const sanitizeText = (text: string) => {
     return text.replace(/[^a-zA-Z]/g, "").toLowerCase();
@@ -110,7 +109,7 @@ export const App = ({
   }, [getCharacter, selectedCharcter]);
 
   useEffect(() => {
-    if (seconds === 0 || gameOver === true) return;
+    if (seconds === 0) return;
     const date = DateTime.now().toFormat("dd/MM/yyyy");
     localStorage.setItem("visited", "true");
     localStorage.setItem(date, JSON.stringify({ guesses, gameOver, seconds }));

@@ -126,7 +126,7 @@ export const Scoreboard = ({
                         alignItems={"center"}
                         bgColor={isCorrect ? green : red}
                         flex={1}
-                        minWidth={"290"}
+                        minWidth={"300"}
                         pr={4}
                       >
                         <Image height={50} src={guess.img} />
