@@ -30,6 +30,7 @@ export const Scoreboard = ({
     "SEX",
     "RACE",
     "ORGANIZATION",
+    "PROJECTILE",
     "RELEASE",
   ];
   const roleIcon = {
