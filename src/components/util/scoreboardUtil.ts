@@ -18,9 +18,7 @@ function isPartial(str1: string, str2: string): boolean | undefined {
 }
 
 export const gradeGuess = (guess: Character, actual: Character) => {
-  console.log("guess", guess);
-  console.log("actual", actual);
-  const isCorrect = guess.name === actual.name;
+  const isCorrect = guess.name.toUpperCase() === actual.name.toUpperCase();
   const role = guess.role === actual.role;
   const gender = guess.gender === actual.gender;
   const org = isPartial(guess.org, actual.org);
