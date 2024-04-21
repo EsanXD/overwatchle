@@ -1,20 +1,8 @@
-import {
-  Flex,
-  Image,
-  Heading,
-  Button,
-  IconButton,
-  Card,
-  CardBody,
-  useToast,
-  useMediaQuery,
-  Text,
-} from "@chakra-ui/react";
+import { Flex, IconButton, useToast, useMediaQuery } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import { styles } from "../util/consts";
 import { HeroSelect } from "../heroSelect/HeroSelect";
 import { useCallback, useEffect, useState } from "react";
-import { Character, DailyWord } from "../util/interfaces";
+import { Character } from "../util/interfaces";
 import { TutorialModal } from "../modals/Tutorial";
 import { Settings } from "../menu/Settings";
 import { Scoreboard } from "../scoreboard.tsx/Scoreboard";
@@ -55,6 +43,7 @@ export const App = ({
   const toast = useToast();
   const [isLargeSize] = useMediaQuery("(min-width: 1530px)");
   const [firstLoad, setFirstLoad] = useState(true);
+
   const sanitizeText = (text: string) => {
     return text.replace(/[^a-zA-Z]/g, "").toLowerCase();
   };

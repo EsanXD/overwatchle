@@ -18,12 +18,14 @@ function isPartial(str1: string, str2: string): boolean | undefined {
 }
 
 export const gradeGuess = (guess: Character, actual: Character) => {
+  console.log("guess", guess);
+  console.log("actual", actual);
   const isCorrect = guess.name === actual.name;
   const role = guess.role === actual.role;
   const gender = guess.gender === actual.gender;
   const org = isPartial(guess.org, actual.org);
   const race = guess.race === actual.race;
-  const projectileType = isPartial(guess.projectileType, actual.projectileType);
-  const releaseYear = guess.releaseYear === actual.releaseYear;
+  const projectileType = isPartial(guess.projectiletype, actual.projectiletype);
+  const releaseYear = guess.releaseyear === actual.releaseyear;
   return [isCorrect, role, gender, org, race, projectileType, releaseYear];
 };

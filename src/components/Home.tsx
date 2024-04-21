@@ -33,11 +33,7 @@ const Home = () => {
           { params: { date: DateTime.now().toFormat("dd/MM/yyyy") } }
         );
         const resp = JSON.parse(atob(atob(atob(response.data))));
-        setData({
-          ...resp[0],
-          projectileType: resp[0].projectiletype,
-          releaseYear: resp[0].releaseyear,
-        } as Character);
+        setData({ ...resp[0] } as Character);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

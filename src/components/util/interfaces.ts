@@ -13,7 +13,7 @@ export interface Character {
   role: "tank" | "dps" | "support";
   race: string;
   org: string;
-  projectileType: string;
-  releaseYear: number;
+  projectiletype: string;
+  releaseyear: number;
   img: string;
 }
