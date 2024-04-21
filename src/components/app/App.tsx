@@ -74,7 +74,7 @@ export const App = ({
         isClosable: true,
       });
     }
-    if (currentCharacter?.name === actual?.name) {
+    if (currentCharacter?.name.toUpperCase() === actual?.name.toUpperCase()) {
       setTimerActive(false);
       setCharacter(currentCharacter.name);
       setModalActive(ModalStates.SHOW_SCORE);

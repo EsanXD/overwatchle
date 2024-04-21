@@ -82,7 +82,7 @@ export const HeroPool = ({
       >
         {characters.map((character) => {
           const isGuessed = guesses.some(
-            (guess) => character.name === guess.name
+            (guess) => character.name.toUpperCase() === guess.name.toUpperCase()
           );
           const isSelected = selected === character.name;
           return (
@@ -137,7 +137,7 @@ export const HeroPool = ({
                     style={styles.font}
                     color={"#f06414"}
                   >
-                    {character.name}
+                    {character.name.toUpperCase()}
                   </Text>
                 </PopoverBody>
               </PopoverContent>

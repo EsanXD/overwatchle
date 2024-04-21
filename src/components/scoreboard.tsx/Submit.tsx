@@ -87,7 +87,7 @@ export const Submit = ({
             style={styles.font}
             color={blue}
           >
-            {currentCharacter?.name ?? "CHARACTER"}
+            {currentCharacter?.name.toUpperCase() ?? "CHARACTER"}
           </Heading>
           <Button
             onClick={
