@@ -20,8 +20,10 @@ import { Settings } from "../menu/Settings";
 import { Scoreboard } from "../scoreboard.tsx/Scoreboard";
 import { Characters } from "../util/characters";
 import { DateTime } from "luxon";
+import { ScoreModal } from "../modals/Score";
+import { Submit } from "../scoreboard.tsx/Submit";
 
-const ModalStates = {
+export const ModalStates = {
   TUTORIAL: "tutorial",
   SHOW_SCORE: "showScore",
   GAME_OVER: "gameOver",
@@ -35,13 +37,10 @@ export const App = ({
 }: {
   data: DailyWord[];
   endless: boolean;
-  back: any;
+  back: () => void;
   firstTime: boolean;
 }) => {
   const orange = "#FFA301";
-  const grey = "#40475B";
-  const darkGrey = "#272C3A";
-  const blue = "#218ffe";
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
   const [modalActive, setModalActive] = useState<any>(
     firstTime ? ModalStates.TUTORIAL : ""
@@ -54,14 +53,13 @@ export const App = ({
   const [timerActive, setTimerActive] = useState(false);
   const toast = useToast();
   const [isLargeSize] = useMediaQuery("(min-width: 1530px)");
+  const [firstLoad, setFirstLoad] = useState(true);
   const sanitizeText = (text: string) => {
     return text.replace(/[^a-zA-Z]/g, "").toLowerCase();
   };
-
   const getCharacter = useCallback((name: string): Character => {
     return Characters.find((c) => sanitizeText(c.name) === sanitizeText(name))!;
   }, []);
-
   useEffect(() => {
     const timer = setInterval(() => {
       if (timerActive) setSeconds((prevSeconds) => prevSeconds + 1);
@@ -88,21 +86,13 @@ export const App = ({
         isClosable: true,
       });
     }
-    if (currentCharacter === actual) {
+    if (currentCharacter?.name === actual?.name) {
       setTimerActive(false);
       setCharacter(currentCharacter.name);
+      setModalActive(ModalStates.SHOW_SCORE);
       setGameOver(true);
     }
   }, [actual, currentCharacter, gameOver, guesses, toast]);
-
-  const formatTimer = (time: number) => {
-    const hours = Math.floor(time / 3600);
-    const minutes = Math.floor((time % 3600) / 60);
-    const seconds = time % 60;
-    return `${hours > 0 ? hours + ":" : ""}${
-      minutes < 10 ? `0${minutes}` : minutes
-    }:${seconds < 10 ? `0${seconds}` : seconds}`;
-  };
 
   useEffect(() => {
     setCurrentCharacter(getCharacter(selectedCharcter));
@@ -118,13 +108,16 @@ export const App = ({
   useEffect(() => {
     const date = DateTime.now().toFormat("dd/MM/yyyy");
     const storedData = localStorage.getItem(date);
-    if (storedData && !seconds) {
+    if (storedData && firstLoad) {
+      setFirstLoad(false);
       const data = JSON.parse(storedData);
       setGuesses(data.guesses);
       setGameOver(data.gameOver);
       setSeconds(data.seconds);
-      if (data.gameOver) setTimerActive(false);
-      else setTimerActive(true);
+      if (data.gameOver) {
+        setTimerActive(false);
+        setModalActive(ModalStates.SHOW_SCORE);
+      } else setTimerActive(true);
     }
     const handleKeyPress = (event: any) => {
       if (event.key === "Enter") {
@@ -137,7 +130,7 @@ export const App = ({
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [handleSubmit]);
+  }, [handleSubmit, seconds, firstLoad]);
 
   return (
     <Flex
@@ -174,61 +167,14 @@ export const App = ({
         ) : (
           <></>
         )}
-        <Card zIndex={1} maxHeight={262} w={isLargeSize ? 350 : "90vw"}>
-          <CardBody p={0} w={"100%"}>
-            <Flex bgColor={grey} flex={1}>
-              <Image
-                height={isLargeSize ? 150 : 75}
-                src={
-                  currentCharacter?.img ??
-                  "https://blz-contentstack-images.akamaized.net/v3/assets/blt2477dcaf4ebd440c/blt451e9e607acad0dc/64a72e2c9d480a8704791cbd/Dive_Into_Enemy_Lines.png?format=webply&quality=90"
-                }
-                alt="selected character image"
-                borderRadius="lg"
-              />
-              <Flex
-                height={isLargeSize ? 150 : 75}
-                justifyContent={"center"}
-                alignItems={"center"}
-                flex={1}
-              >
-                <Flex
-                  flexDirection={"column"}
-                  alignItems={"center"}
-                  bgColor={darkGrey}
-                  borderRadius={8}
-                  px={4}
-                >
-                  <Text as="em" color={"white"} style={styles.font}>
-                    {formatTimer(seconds)}
-                  </Text>
-                  <Text
-                    as="em"
-                    color={"white"}
-                    fontWeight={"light"}
-                    fontSize={10}
-                    style={styles.font}
-                  >
-                    {isLargeSize ? "OBJ CONTEST TIME" : "OBJ TIME"}
-                  </Text>
-                </Flex>
-              </Flex>
-            </Flex>
-            <Flex direction={"column"} p={4} gap={4} bgColor={darkGrey}>
-              <Heading
-                fontSize={isLargeSize ? "xl" : "20"}
-                as="em"
-                style={styles.font}
-                color={blue}
-              >
-                {currentCharacter?.name ?? "CHARACTER"}
-              </Heading>
-              <Button onClick={handleSubmit} style={styles.font} as={"em"}>
-                {currentCharacter ? "ENTER" : "SELECT"}
-              </Button>
-            </Flex>
-          </CardBody>
-        </Card>
+        <Submit
+          isLargeSize={isLargeSize}
+          seconds={seconds}
+          gameOver={gameOver}
+          currentCharacter={currentCharacter}
+          handleSubmit={handleSubmit}
+          setModalActive={setModalActive}
+        />
       </Flex>
       <Flex
         direction={"row"}
@@ -251,6 +197,14 @@ export const App = ({
 
       {modalActive === ModalStates.TUTORIAL && (
         <TutorialModal onClose={() => setModalActive(undefined)} />
+      )}
+      {modalActive === ModalStates.SHOW_SCORE && (
+        <ScoreModal
+          guesses={guesses}
+          actual={actual}
+          isLargeSize={isLargeSize}
+          onClose={() => setModalActive(undefined)}
+        />
       )}
       {settingsOpen && (
         <Settings

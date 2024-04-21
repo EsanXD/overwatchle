@@ -14,6 +14,7 @@ import {
   Flex,
   Divider,
 } from "@chakra-ui/react";
+import { gradeGuess } from "../util/scoreboardUtil";
 
 export const Scoreboard = ({
   guesses,
@@ -40,24 +41,6 @@ export const Scoreboard = ({
   };
   const reversedList = guesses.slice().reverse();
 
-  function isPartial(str1: string, str2: string): boolean | undefined {
-    const arr1 = str1.split("/");
-    const arr2 = str2.split("/");
-
-    const intersection = arr1.filter((element) => arr2.includes(element));
-
-    if (
-      intersection.length === arr1.length &&
-      intersection.length === arr2.length
-    ) {
-      return true; // Exact same elements
-    } else if (intersection.length > 0) {
-      return undefined; // Partially the same
-    }
-
-    return false; // No intersection
-  }
-
   return (
     <Flex flexDirection={"column"} alignItems={"center"} zIndex={1}>
       <TableContainer
@@ -79,16 +62,15 @@ export const Scoreboard = ({
           </Thead>
           <Tbody>
             {reversedList.map((guess, index) => {
-              const isCorrect = guess.name === actual.name;
-              const role = guess.role === actual.role;
-              const gender = guess.gender === actual.gender;
-              const org = isPartial(guess.org, actual.org);
-              const race = guess.race === actual.race;
-              const projectileType = isPartial(
-                guess.projectileType,
-                actual.projectileType
-              );
-              const releaseYear = guess.releaseYear === actual.releaseYear;
+              const [
+                isCorrect,
+                role,
+                gender,
+                org,
+                race,
+                projectileType,
+                releaseYear,
+              ] = gradeGuess(guess, actual);
               const fieldGuesses: (boolean | undefined)[] = [
                 role,
                 gender,
