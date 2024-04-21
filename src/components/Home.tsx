@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Flex, Spinner } from "@chakra-ui/react";
-import { Styles, DailyWord as DailyWord } from "./util/interfaces";
+import { Styles, DailyWord as DailyWord, Character } from "./util/interfaces";
 import { Header } from "./Header";
 import { App } from "./app/App";
 import { Menu } from "./menu/Menu";
@@ -10,7 +10,7 @@ import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { DateTime } from "luxon";
 
 const Home = () => {
-  const [data, setData] = useState<DailyWord[]>([]);
+  const [data, setData] = useState<Character | undefined>(undefined);
   const [endless, setEndless] = useState(false);
   const [showMenu, setShowMenu] = useState(true);
   const [firstTime, setFirstTime] = useState(true);
@@ -33,7 +33,11 @@ const Home = () => {
           { params: { date: DateTime.now().toFormat("dd/MM/yyyy") } }
         );
         const resp = JSON.parse(atob(atob(atob(response.data))));
-        setData(resp);
+        setData({
+          ...resp[0],
+          projectileType: resp[0].projectiletype,
+          releaseYear: resp[0].releaseyear,
+        } as Character);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -53,7 +57,7 @@ const Home = () => {
       <Header />
       {showMenu ? (
         <Menu setEndless={setEndless} showMenu={setShowMenu} />
-      ) : data.length > 0 ? (
+      ) : data ? (
         <App
           firstTime={firstTime}
           endless={endless}

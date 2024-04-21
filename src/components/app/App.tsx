@@ -35,12 +35,13 @@ export const App = ({
   back,
   firstTime,
 }: {
-  data: DailyWord[];
+  data: Character;
   endless: boolean;
   back: () => void;
   firstTime: boolean;
 }) => {
   const orange = "#FFA301";
+  const actual = data;
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
   const [modalActive, setModalActive] = useState<any>(
     firstTime ? ModalStates.TUTORIAL : ""
@@ -68,8 +69,6 @@ export const App = ({
       clearInterval(timer);
     };
   }, [timerActive]);
-
-  const actual = getCharacter(data.length ? data[0].hero : "");
 
   const handleSubmit = useCallback(() => {
     if (gameOver) return;
@@ -158,15 +157,11 @@ export const App = ({
         flexDir={isLargeSize ? "row" : "column"}
         alignItems={isLargeSize ? "" : "center"}
       >
-        {data.length ? (
-          <Scoreboard
-            isLargeSize={isLargeSize}
-            guesses={guesses}
-            actual={getCharacter(data[0].hero)}
-          />
-        ) : (
-          <></>
-        )}
+        <Scoreboard
+          isLargeSize={isLargeSize}
+          guesses={guesses}
+          actual={actual}
+        />
         <Submit
           isLargeSize={isLargeSize}
           seconds={seconds}
