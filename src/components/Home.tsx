@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Spinner } from "@chakra-ui/react";
 import { Styles, DailyWord as DailyWord } from "./util/interfaces";
 import { Header } from "./Header";
 import { App } from "./app/App";
@@ -53,13 +53,29 @@ const Home = () => {
       <Header />
       {showMenu ? (
         <Menu setEndless={setEndless} showMenu={setShowMenu} />
-      ) : (
+      ) : data.length > 0 ? (
         <App
           firstTime={firstTime}
           endless={endless}
           data={data}
           back={() => setShowMenu(true)}
         />
+      ) : (
+        <Flex
+          flex={1}
+          bg={"rgba(229, 235, 244, .8)"}
+          width={"100vw"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Spinner
+            thickness="8px"
+            speed="0.7s"
+            emptyColor="gray.200"
+            color="orange.300"
+            size="xl"
+          />
+        </Flex>
       )}
       {init && (
         <Particles
