@@ -118,7 +118,7 @@ export const Scoreboard = ({
                           as="em"
                           textAlign={"start"}
                         >
-                          {guess.name}
+                          {guess.name.toUpperCase()}
                         </Text>
                         {isCorrect ? (
                           <Flex
@@ -226,7 +226,7 @@ export const Scoreboard = ({
                         justifyContent={"center"}
                         alignItems={"center"}
                       >
-                        {guess.projectileType.toUpperCase()}
+                        {guess.projectiletype.toUpperCase()}
                       </Flex>
                     </Td>
 
@@ -238,7 +238,7 @@ export const Scoreboard = ({
                         justifyContent={"center"}
                         alignItems={"center"}
                       >
-                        {guess.releaseYear}
+                        {guess.releaseyear}
                       </Flex>
                     </Td>
                   </Tr>
