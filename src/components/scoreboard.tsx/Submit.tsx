@@ -18,6 +18,8 @@ export const Submit = ({
   currentCharacter,
   handleSubmit,
   setModalActive,
+  endless,
+  resetGame,
 }: {
   isLargeSize: boolean;
   seconds: number;
@@ -25,6 +27,8 @@ export const Submit = ({
   currentCharacter?: Character;
   handleSubmit: () => void;
   setModalActive: (modal: string) => void;
+  endless: boolean;
+  resetGame: () => void;
 }) => {
   const formatTimer = (time: number) => {
     const hours = Math.floor(time / 3600);
@@ -90,9 +94,10 @@ export const Submit = ({
             {currentCharacter?.name.toUpperCase() ?? "CHARACTER"}
           </Heading>
           <Button
+            disabled={gameOver && endless}
             onClick={
               gameOver
-                ? () => setModalActive(ModalStates.SHOW_SCORE)
+                ? () => !endless && setModalActive(ModalStates.SHOW_SCORE)
                 : handleSubmit
             }
             style={styles.font}
@@ -100,6 +105,11 @@ export const Submit = ({
           >
             {currentCharacter ? "ENTER" : gameOver ? "SHOW SCORE" : "SELECT"}
           </Button>
+          {gameOver && endless && (
+            <Button onClick={resetGame} style={styles.font} as={"em"}>
+              RESET GAME
+            </Button>
+          )}
         </Flex>
       </CardBody>
     </Card>

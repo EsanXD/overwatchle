@@ -29,7 +29,11 @@ export const App = ({
   firstTime: boolean;
 }) => {
   const orange = "#FFA301";
-  const actual = data;
+  const [actual, setActual] = useState<Character>(
+    endless
+      ? Characters[Math.floor((Math.random() * 1000000) % Characters.length)]
+      : data
+  );
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
   const [modalActive, setModalActive] = useState<any>(
     firstTime ? ModalStates.TUTORIAL : ""
@@ -77,17 +81,28 @@ export const App = ({
     if (currentCharacter?.name.toUpperCase() === actual?.name.toUpperCase()) {
       setTimerActive(false);
       setCharacter(currentCharacter.name);
-      setModalActive(ModalStates.SHOW_SCORE);
+      !endless && setModalActive(ModalStates.SHOW_SCORE);
       setGameOver(true);
     }
   }, [actual, currentCharacter, gameOver, guesses, toast]);
+
+  const resetGame = () => {
+    setGuesses([]);
+    setGameOver(false);
+    setSeconds(0);
+    setTimerActive(false);
+    setCharacter("");
+    setActual(
+      Characters[Math.floor((Math.random() * 1000000) % Characters.length)]
+    );
+  };
 
   useEffect(() => {
     setCurrentCharacter(getCharacter(selectedCharcter));
   }, [getCharacter, selectedCharcter]);
 
   useEffect(() => {
-    if (seconds === 0) return;
+    if (seconds === 0 || endless) return;
     const date = DateTime.now().toFormat("dd/MM/yyyy");
     localStorage.setItem("visited", "true");
     localStorage.setItem(date, JSON.stringify({ guesses, gameOver, seconds }));
@@ -96,7 +111,7 @@ export const App = ({
   useEffect(() => {
     const date = DateTime.now().toFormat("dd/MM/yyyy");
     const storedData = localStorage.getItem(date);
-    if (storedData && firstLoad) {
+    if (storedData && firstLoad && !endless) {
       setFirstLoad(false);
       const data = JSON.parse(storedData);
       setGuesses(data.guesses);
@@ -158,6 +173,8 @@ export const App = ({
           currentCharacter={currentCharacter}
           handleSubmit={handleSubmit}
           setModalActive={setModalActive}
+          endless={endless}
+          resetGame={resetGame}
         />
       </Flex>
       <Flex

@@ -42,7 +42,7 @@ export const Menu = ({
         >
           PLAY DAILY
         </Heading>
-        {/* <Heading
+        <Heading
           size={{ base: "2xl", sm: "2xl", md: "4xl", lg: "4xl" }}
           style={styles.font}
           as="em"
@@ -57,7 +57,7 @@ export const Menu = ({
           }}
         >
           ENDLESS
-        </Heading> */}
+        </Heading>
         <Heading
           size={{ base: "xl", sm: "xl", md: "2xl", lg: "2xl" }}
           style={styles.font}

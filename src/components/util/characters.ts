@@ -452,7 +452,7 @@ export const Characters: Character[] = [
   },
   {
     name: "venture",
-    gender: "female",
+    gender: "n/a",
     role: "dps",
     race: "human",
     org: "wayfinder",
