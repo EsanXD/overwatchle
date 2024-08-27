@@ -49,7 +49,7 @@ export const Settings = ({
               <CardBody p={1}>
                 <Image
                   src={
-                    "https://th.bing.com/th/id/OIG3.h98jBeAgVndtHVswq2XN?pid=ImgGn"
+                    "https://static.wikia.nocookie.net/overwatch_gamepedia/images/2/28/PI_Overwatch_Esports.png/revision/latest?cb=20240228082830"
                   }
                   alt="alt"
                   height={"20vh"}
@@ -76,7 +76,7 @@ export const Settings = ({
               <CardBody p={1}>
                 <Image
                   src={
-                    "https://th.bing.com/th/id/OIG3._cVB3rXkyNU3O3x_DJWx?pid=ImgGn"
+                    "https://static.wikia.nocookie.net/overwatch_gamepedia/images/5/51/PI_Training_Bot.png/revision/latest?cb=20240228133653"
                   }
                   alt="alt"
                   height={"20vh"}

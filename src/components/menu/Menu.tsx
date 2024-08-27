@@ -20,6 +20,7 @@ export const Menu = ({
         justifyContent={"center"}
         alignItems={"start"}
         bg={"rgba(229, 235, 244, .8)"}
+        px={4}
       >
         {showTutorial && (
           <TutorialModal onClose={() => setShowTutorial(false)} />
@@ -70,6 +71,19 @@ export const Menu = ({
           onClick={() => setShowTutorial(true)}
         >
           HOW TO PLAY
+        </Heading>
+        <Heading
+          size={{ base: "xl", sm: "xl", md: "2xl", lg: "2xl" }}
+          style={styles.font}
+          as="em"
+          _hover={{
+            transform: "scale(1.25) translate(50px)",
+          }}
+          cursor="pointer"
+          transition={"transform 0.3s linear"}
+          onClick={() => window.open("https://ko-fi.com/esanx", "_blank")}
+        >
+          SUPPORT ME
         </Heading>
         <Spacer />
         <Spacer />

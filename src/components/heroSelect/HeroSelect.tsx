@@ -22,7 +22,7 @@ export const HeroSelect = ({
     "/Circle_Damage.svg",
     "/Circle_Support.svg",
   ];
-  const numRows: Record<string, number> = { tank: 6, dps: 9, support: 5 };
+  const numRows: Record<string, number> = { tank: 6, dps: 9, support: 6 };
 
   return (
     <>
@@ -62,7 +62,7 @@ export const HeroSelect = ({
             isLargeSize={isLargeSize}
             selected={selected}
             setCharacterGuess={setCharacterGuess}
-            numCols={5}
+            numCols={6}
             type={"support"}
           />
         </Flex>

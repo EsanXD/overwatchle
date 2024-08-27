@@ -38,12 +38,12 @@ export const ScoreModal = ({
   };
 
   const shareStringBuilder = () => {
-    return `Overwatchle: ${DateTime.now().toFormat(
-      "MM/dd"
-    )}\n\n${reversedList.map((guess, index) => {
-      const gradedGuess = gradeGuess(guess, actual);
-      return buildEmojiRow(gradedGuess) + "\n";
-    })}`
+    return `Overwatchle: ${DateTime.now().toFormat("MM/dd")}\n\n${guesses.map(
+      (guess, index) => {
+        const gradedGuess = gradeGuess(guess, actual);
+        return buildEmojiRow(gradedGuess) + "\n";
+      }
+    )}`
       .replaceAll(",", "")
       .replaceAll(",", "");
   };
@@ -71,7 +71,7 @@ export const ScoreModal = ({
               maxHeight={"30vh"}
               overflowY={"auto"}
             >
-              {reversedList.map((guess, index) => {
+              {guesses.map((guess, index) => {
                 const gradedGuess = gradeGuess(guess, actual);
                 return (
                   <Text fontSize={isLargeSize ? 32 : 16}>

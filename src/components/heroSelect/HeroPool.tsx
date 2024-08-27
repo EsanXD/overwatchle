@@ -78,7 +78,7 @@ export const HeroPool = ({
         }}
         gap={{ base: 1, lg: 1 }}
         wrap={"wrap"}
-        justifyContent={"center"}
+        justifyContent={"start"}
       >
         {characters.map((character) => {
           const isGuessed = guesses.some(

@@ -25,5 +25,5 @@ export const gradeGuess = (guess: Character, actual: Character) => {
   const race = guess.race === actual.race;
   const projectileType = isPartial(guess.projectiletype, actual.projectiletype);
   const releaseYear = guess.releaseyear === actual.releaseyear;
-  return [isCorrect, role, gender, org, race, projectileType, releaseYear];
+  return [isCorrect, role, gender, race, org, projectileType, releaseYear];
 };
