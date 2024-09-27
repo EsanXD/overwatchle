@@ -8,6 +8,8 @@ import axios from "axios";
 import { loadSlim } from "@tsparticles/slim";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { DateTime } from "luxon";
+import { Characters } from "./util/characters";
+const seedrandom = require("seedrandom");
 
 const Home = () => {
   const [data, setData] = useState<Character | undefined>(undefined);
@@ -15,6 +17,13 @@ const Home = () => {
   const [showMenu, setShowMenu] = useState(true);
   const [firstTime, setFirstTime] = useState(true);
   const [init, setInit] = useState(false);
+
+  const generateRandomChar = () => {
+    const seed = DateTime.now().toFormat("dd/MM/yyyy");
+    const rng = seedrandom(seed);
+    const randomIndex = Math.floor((rng() * 100000) % Characters.length);
+    return Characters[randomIndex];
+  };
 
   useEffect(() => {
     const hasVisited = localStorage.getItem("visited");
@@ -27,16 +36,7 @@ const Home = () => {
       setInit(true);
     });
     const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://overwatchle-api2.fly.dev/daily",
-          { params: { date: DateTime.now().toFormat("dd/MM/yyyy") } }
-        );
-        const resp = JSON.parse(atob(atob(atob(response.data))));
-        setData({ ...resp[0] } as Character);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      setData(generateRandomChar());
     };
     fetchData();
   }, []);
