@@ -21,6 +21,7 @@ export const HeroPool = ({
   isDisabled,
   isLargeSize,
   guesses,
+  isTankRow,
 }: {
   selected: string;
   numCols: number;
@@ -29,6 +30,7 @@ export const HeroPool = ({
   isDisabled: boolean;
   isLargeSize?: boolean;
   guesses: Character[];
+  isTankRow: boolean;
 }) => {
   const characters = type === "support" ? support : type === "dps" ? dps : tank;
   const typeIcon =
@@ -78,7 +80,7 @@ export const HeroPool = ({
         }}
         gap={{ base: 1, lg: 1 }}
         wrap={"wrap"}
-        justifyContent={"start"}
+        justifyContent={isTankRow ? "end" : "start"}
       >
         {characters.map((character) => {
           const isGuessed = guesses.some(

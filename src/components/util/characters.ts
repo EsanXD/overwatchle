@@ -2,10 +2,6 @@ import { Character } from "./interfaces";
 
 export const tank = [
   {
-    name: "MAUGA",
-    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/9ee3f5a62893091d575ec0a0d66df878597086374202c6fc7da2d63320a7d02e.png",
-  },
-  {
     name: "D.VA",
     img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/ca114f72193e4d58a85c087e9409242f1a31e808cf4058678b8cbf767c2a9a0a.png",
   },
@@ -14,8 +10,16 @@ export const tank = [
     img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/13750471c693c1a360eb19d5ace229c8599a729cd961d72ebee0e157657b7d18.png",
   },
   {
+    name: "HAZARD",
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/612ae1e6d28125bd4d4d18c2c4e5b004936c094556239ed24a1c0a806410a020.png",
+  },
+  {
     name: "JUNKER QUEEN",
     img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/cef2406b2244b80506f83b8fb9ebaf214f41fa8795cbeef84026cd8018561d04.png",
+  },
+  {
+    name: "MAUGA",
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/9ee3f5a62893091d575ec0a0d66df878597086374202c6fc7da2d63320a7d02e.png",
   },
   {
     name: "ORISA",
@@ -203,6 +207,16 @@ export const Characters: Character[] = [
     projectiletype: "projectile",
     releaseyear: 2017,
     img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/13750471c693c1a360eb19d5ace229c8599a729cd961d72ebee0e157657b7d18.png",
+  },
+  {
+    name: "hazard",
+    gender: "male",
+    role: "tank",
+    race: "human",
+    org: "phreaks",
+    projectiletype: "projectile",
+    releaseyear: 2024,
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/612ae1e6d28125bd4d4d18c2c4e5b004936c094556239ed24a1c0a806410a020.png",
   },
   {
     name: "junker queen",

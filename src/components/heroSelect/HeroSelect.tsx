@@ -39,15 +39,17 @@ export const HeroSelect = ({
           py={8}
         >
           <HeroPool
+            isTankRow={true}
             guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}
             selected={selected}
             setCharacterGuess={setCharacterGuess}
-            numCols={6}
+            numCols={7}
             type={"tank"}
           />
           <HeroPool
+            isTankRow={false}
             guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}
@@ -57,6 +59,7 @@ export const HeroSelect = ({
             type={"dps"}
           />
           <HeroPool
+            isTankRow={false}
             guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}
@@ -90,6 +93,7 @@ export const HeroSelect = ({
           </Flex>
 
           <HeroPool
+            isTankRow={false}
             guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}
