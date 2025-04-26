@@ -1,7 +1,8 @@
-import { Flex, IconButton, useBreakpointValue, Image } from "@chakra-ui/react";
+import { Flex, IconButton, Image } from "@chakra-ui/react";
 import { HeroPool } from "./HeroPool";
 import { useState } from "react";
 import { Character } from "../util/interfaces";
+import { tank, dps, support } from "../util/characters";
 
 export const HeroSelect = ({
   selected,
@@ -22,7 +23,7 @@ export const HeroSelect = ({
     "/Circle_Damage.svg",
     "/Circle_Support.svg",
   ];
-  const numRows: Record<string, number> = { tank: 6, dps: 9, support: 6 };
+  const numRows: Record<string, number> = { tank: Math.ceil(tank.length / 2), dps: Math.ceil(dps.length / 2), support: Math.ceil(support.length / 2) };
 
   return (
     <>
@@ -39,33 +40,33 @@ export const HeroSelect = ({
           py={8}
         >
           <HeroPool
-            isTankRow={true}
+            justifyContent={numRows[0] % 2 === 0 ? 'center' : 'end'}
             guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}
             selected={selected}
             setCharacterGuess={setCharacterGuess}
-            numCols={7}
+            numCols={numRows.tank}
             type={"tank"}
           />
           <HeroPool
-            isTankRow={false}
+            justifyContent={'center'}
             guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}
             selected={selected}
             setCharacterGuess={setCharacterGuess}
-            numCols={9}
+            numCols={numRows.dps}
             type={"dps"}
           />
           <HeroPool
-            isTankRow={false}
+            justifyContent={numRows[2] % 2 === 0 ? 'center' : 'start'}
             guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}
             selected={selected}
             setCharacterGuess={setCharacterGuess}
-            numCols={6}
+            numCols={numRows.support}
             type={"support"}
           />
         </Flex>
@@ -93,7 +94,7 @@ export const HeroSelect = ({
           </Flex>
 
           <HeroPool
-            isTankRow={false}
+            justifyContent="center"
             guesses={guesses}
             isDisabled={isDisabled}
             isLargeSize={isLargeSize}

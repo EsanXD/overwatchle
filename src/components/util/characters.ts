@@ -73,6 +73,10 @@ export const dps = [
     img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/f086bf235cc6b7f138609594218a8385c8e5f6405a39eceb0deb9afb429619fe.png",
   },
   {
+    name: "FREJA",
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/5d1a515607b70f87fd391d0478fb4d706e31a7aebfbcb0edd2cfce04efad256c.png",
+  },
+  {
     name: "GENJI",
     img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/4edf5ea6d58c449a2aeb619a3fda9fff36a069dfbe4da8bc5d8ec1c758ddb8dc.png",
   },
@@ -347,6 +351,16 @@ export const Characters: Character[] = [
     projectiletype: "projectile",
     releaseyear: 2020,
     img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/f086bf235cc6b7f138609594218a8385c8e5f6405a39eceb0deb9afb429619fe.png",
+  },
+  {
+    name: "freja",
+    gender: "female",
+    role: "dps",
+    race: "human",
+    org: "bounty hunter",
+    projectiletype: "projectile",
+    releaseyear: 2025,
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/5d1a515607b70f87fd391d0478fb4d706e31a7aebfbcb0edd2cfce04efad256c.png",
   },
   {
     name: "genji",
