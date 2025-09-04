@@ -176,6 +176,10 @@ export const support = [
     img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/000beeb5606e01497897fa9210dd3b1e78e1159ebfd8afdc9e989047d7d3d08f.png",
   },
   {
+    name: "WUYANG",
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/e4157a71bb307b4ca910d901773f43d187c22101c5f4284a0a5f3caba8ec4bdd.png",
+  },
+  {
     name: "ZENYATTA",
     img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/71cabc939c577581f66b952f9c70891db779251e8e70f29de3c7bf494edacfe4.png",
   },
@@ -601,6 +605,16 @@ export const Characters: Character[] = [
     projectiletype: "beam",
     releaseyear: 2017,
     img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/000beeb5606e01497897fa9210dd3b1e78e1159ebfd8afdc9e989047d7d3d08f.png",
+  },
+  {
+    name: "wuyang",
+    gender: "male",
+    role: "support",
+    race: "human",
+    org: "overwatch",
+    projectiletype: "projectile",
+    releaseyear: 2025,
+    img: "https://d15f34w2p8l1cc.cloudfront.net/overwatch/e4157a71bb307b4ca910d901773f43d187c22101c5f4284a0a5f3caba8ec4bdd.png",
   },
   {
     name: "zenyatta",
